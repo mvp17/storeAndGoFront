@@ -3,9 +3,7 @@
 </svelte:head>
 
 <script>
-	import { Card } from 'flowbite-svelte';
+	import WarehouseMap from '../../components/WarehouseMap.svelte';
 </script>
 
-<Card>
-	<h1>Office home</h1>
-</Card>
+<WarehouseMap></WarehouseMap>

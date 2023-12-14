@@ -17,6 +17,12 @@
 					<li aria-current={$page.url.pathname === '/offices/manifests' ? 'page' : undefined}>
 						<a href="/offices/manifests">Manifests</a>
 					</li>
+					<li aria-current={$page.url.pathname === '/offices/sla-control' ? 'page' : undefined}>
+						<a href="/offices/sla-control">SLA Control</a>
+					</li>
+					<li aria-current={$page.url.pathname === '/offices/users' ? 'page' : undefined}>
+						<a href="/offices/users">Users</a>
+					</li>
 					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 						<a href="/">Logout</a>
 					</li>
