@@ -1,5 +1,6 @@
 export const todoTasks = [
     {
+        id: 1,
         type: 0,
         description: "Desc 1 todo",
         room: "Room 1",
@@ -8,6 +9,7 @@ export const todoTasks = [
         date: "01/01/2023"
     },
     {
+        id: 2,
         type: 1,
         description: "Desc 2 todo",
         room: "Room B",
@@ -16,6 +18,7 @@ export const todoTasks = [
         date: "01/01/2023"
     },
     {
+        id: 3,
         type: 2,
         description: "Desc polk todo",
         room: "Room F1",
@@ -27,6 +30,7 @@ export const todoTasks = [
 
 export const doingTasks = [
     {
+        id: 4,
         type: 0,
         description: "Desc 1 doing",
         room: "Room 1",
@@ -35,6 +39,7 @@ export const doingTasks = [
         date: "01/01/2023"
     },
     {
+        id: 5,
         type: 1,
         description: "Desc 2 doing",
         room: "Room B",
@@ -43,6 +48,7 @@ export const doingTasks = [
         date: "01/01/2023"
     },
     {
+        id: 6,
         type: 2,
         description: "Desc polk doing",
         room: "Room F1",
@@ -54,6 +60,7 @@ export const doingTasks = [
 
 export const doneTasks = [
     {
+        id: 7,
         type: 0,
         description: "Desc 1 done",
         room: "Room 1",
@@ -62,6 +69,7 @@ export const doneTasks = [
         date: "01/01/2023"
     },
     {
+        id: 8,
         type: 1,
         description: "Desc 2 done",
         room: "Room B",
@@ -70,6 +78,7 @@ export const doneTasks = [
         date: "01/01/2023"
     },
     {
+        id: 9,
         type: 2,
         description: "Desc polk done",
         room: "Room F1",

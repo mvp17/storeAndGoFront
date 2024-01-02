@@ -3,17 +3,31 @@
 </svelte:head>
 
 <script>
-	import { Breadcrumb, BreadcrumbItem, Table, TableBody, TableHead, TableHeadCell, 
-             TableBodyRow, TableBodyCell } from 'flowbite-svelte';
-    import { manifestContainers } from '../../../../mocks/manifestContainers.js';
-    const manifest = {
-        id: 1
-    };
+  import { Breadcrumb, BreadcrumbItem, Table, TableBody, TableHead, TableHeadCell, 
+           TableBodyRow, TableBodyCell } from 'flowbite-svelte';
+  import { manifestContainers } from '../../../../mocks/manifestContainers.js';
+  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import { baseURL } from '../../../../environment';
+	import axios from 'axios';
+
+  let manifestId;
+  onMount (async () => {
+        try {
+          manifestId = $page.params.manifestId;
+          //axios.defaults.withCredentials = true;
+          const instance = axios.create({ baseURL: baseURL });
+          //const res = await instance.get('/get-manifest-containers', {id: manifestId});
+          //manifestContainers = res.data.manifestContainers;
+        } catch (err) {
+            console.log(err);
+        }
+    });
 </script>
 
 <Breadcrumb solid>
   <BreadcrumbItem href="/offices/manifests">Manifests</BreadcrumbItem>
-  <BreadcrumbItem>{manifest.id}</BreadcrumbItem>
+  <BreadcrumbItem>{manifestId}</BreadcrumbItem>
 </Breadcrumb>
 
 <Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">

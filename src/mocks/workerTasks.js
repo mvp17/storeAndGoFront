@@ -1,5 +1,6 @@
 export const todoTasks = [
     {
+        id: 10,
         type: 0,
         description: "Desc 8521 todo",
         room: "Room M1",
@@ -8,6 +9,7 @@ export const todoTasks = [
         date: "01/01/2023"
     },
     {
+        id: 11,
         type: 1,
         description: "Desc 2 todo",
         room: "Room M2",
@@ -16,6 +18,7 @@ export const todoTasks = [
         date: "01/01/2023"
     },
     {
+        id: 12,
         type: 2,
         description: "Desc polk todo",
         room: "Room M3",
@@ -27,6 +30,7 @@ export const todoTasks = [
 
 export const doingTasks = [
     {
+        id: 13,
         type: 0,
         description: "Desc 1 doing",
         room: "Room M1",
@@ -35,6 +39,7 @@ export const doingTasks = [
         date: "01/01/2023"
     },
     {
+        id: 14,
         type: 1,
         description: "Desc 2 doing",
         room: "Room F7",
@@ -43,6 +48,7 @@ export const doingTasks = [
         date: "01/01/2023"
     },
     {
+        id: 15,
         type: 2,
         description: "Desc polk doing",
         room: "Room F7",
@@ -54,6 +60,7 @@ export const doingTasks = [
 
 export const doneTasks = [
     {
+        id: 16,
         type: 0,
         description: "Desc 1 done",
         room: "Room M2",
@@ -62,6 +69,7 @@ export const doneTasks = [
         date: "01/01/2023"
     },
     {
+        id: 17,
         type: 1,
         description: "Desc 2 done",
         room: "Room M1",
@@ -70,6 +78,7 @@ export const doneTasks = [
         date: "01/01/2023"
     },
     {
+        id: 18,
         type: 2,
         description: "Desc polk done",
         room: "Room C",

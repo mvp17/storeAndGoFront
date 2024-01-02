@@ -5,15 +5,33 @@
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { rooms } from '../../../../mocks/rooms.js';
+	import { onMount } from 'svelte';
+	import { baseURL } from '../../../../environment';
+	import axios from 'axios';
+
+	onMount (async () => {
+        try {
+            //axios.defaults.withCredentials = true;
+            const instance = axios.create({ baseURL: baseURL });
+            //const res = await instance.get('/get-rooms');
+            //rooms = res.data.rooms;
+        } catch (err) {
+            console.log(err);
+        }
+    });
 
 	function closeRoom(/** @type {number} */ roomId) {
 		// Backend post request changing room status for room with roomId
 		// Backend get request rooms
+		const instance = axios.create({ baseURL: baseURL });
+		//const res = await instance.patch('/close-room', {id: roomId});
 		console.log("close", roomId)
 	}
 	function openRoom(/** @type {number} */ roomId) {
 		// Backend post request changing room status for room with roomId
 		// Backend get request rooms
+		const instance = axios.create({ baseURL: baseURL });
+		//const res = await instance.patch('/open-room', {id: roomId});
 		console.log("open", roomId)
 	}
 </script>
@@ -47,7 +65,7 @@
 			<div class="grid gap-3 md:grid-cols-3" style="margin-bottom:5px">
 			{#if room.room_status === 1}
 				<Button on:click={() => closeRoom(room.pk)}>Close room</Button>
-				<Button href="/warehouse/manager/rooms/roomDetail?{room.pk}">Show room</Button>
+				<Button href="/warehouse/manager/rooms/{room.pk}">Show room</Button>
 			{/if}
 			{#if room.room_status === 0}
 				<Button on:click={() => openRoom(room.pk)}>Open room</Button>

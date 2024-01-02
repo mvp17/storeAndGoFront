@@ -7,15 +7,39 @@
 			 Table, TableBody, TableHead, TableHeadCell, TableBodyRow, 
 			 TableBodyCell } from 'flowbite-svelte';
 	import { users } from '../../../mocks/users.js';
+	import { onMount } from 'svelte';
+  	import { baseURL } from '../../../environment';
+	import axios from 'axios';
 
-	let username, firstName, lastName;
+	let /** @type {string} */ username, /** @type {string} */ firstName, /** @type {string} */ lastName;
+
+	onMount (async () => {
+        try {
+          //axios.defaults.withCredentials = true;
+          const instance = axios.create({ baseURL: baseURL });
+          /*
+		  const res = await instance.get('/get-users');
+          users = res.data.users;
+		  */
+        } catch (err) {
+            console.log(err);
+        }
+    });
 
 	function registerNewUser () {
-		console.log("register")
+		const instance = axios.create({ baseURL: baseURL });
+          /*
+		  await instance.post('/new-user', {username: username, firstName: firstName, lastName: lastName});
+		  await instance.get('/get-users');
+		  */
 	}
 
-	function deleteUser () {
-		console.log("delete")
+	function deleteUser (/** @type {number} */ userId) {
+		const instance = axios.create({ baseURL: baseURL });
+		/*
+		await instance.delete('/delete-user', {id: userId})
+		await instance.get('/get-users');
+		*/
 	}
 </script>
 
@@ -54,7 +78,7 @@
         <TableBodyCell>{user.username}</TableBodyCell>
         <TableBodyCell>{user.firstName}</TableBodyCell>
         <TableBodyCell>{user.lastName}</TableBodyCell>
-		<TableBodyCell><Button on:click={deleteUser}>Delete</Button></TableBodyCell>
+		<TableBodyCell><Button on:click={() => {deleteUser(user.id)}}>Delete</Button></TableBodyCell>
       </TableBodyRow>
     {/each}
   </TableBody>

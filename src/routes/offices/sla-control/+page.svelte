@@ -6,12 +6,24 @@
 	import { Table, TableBody, TableHead, TableHeadCell, TableBodyRow, TableBodyCell, Card } from 'flowbite-svelte';
 	import { containers } from '../../../mocks/containers.js';
 	import { expiringSLAContainers } from '../../../mocks/expiringSLAContainers.js';
-
-	function getExpiringSLAContainers(limitDate) {
-		// limitDate is today
-		// backend get request: containers with the sla expiring today.
-		// onMount
-	}
+	import { onMount } from 'svelte';
+  	import { baseURL } from '../../../environment';
+	import axios from 'axios';
+	
+	onMount (async () => {
+        try {
+          //axios.defaults.withCredentials = true;
+          const instance = axios.create({ baseURL: baseURL });
+          /*
+		  let res = await instance.get('/get-sla');
+          containers = res.data.slaContainers;
+		  res = await instance.get('/get-expiring-sla-containers');
+		  expiringSLAContainers = res.data.expiringSLAContainers;
+		  */
+        } catch (err) {
+            console.log(err);
+        }
+    });
 </script>
 
 <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

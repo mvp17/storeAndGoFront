@@ -6,6 +6,24 @@
 	import { Card, Button } from 'flowbite-svelte';
 	import { entranceManifests } from '../../../mocks/entranceManifests.js';
 	import { departureManifests } from '../../../mocks/departureManifests.js';
+	import { onMount } from 'svelte';
+  	import { baseURL } from '../../../environment';
+	import axios from 'axios';
+
+	onMount (async () => {
+        try {
+          //axios.defaults.withCredentials = true;
+          const instance = axios.create({ baseURL: baseURL });
+          /*
+		  let res = await instance.get('/get-entrance-manifests');
+          entranceManifests = res.data.entranceManifests;
+		  res = await instance.get('/get-departure-manifests');
+          departureManifests = res.data.departureManifests;
+		  */
+        } catch (err) {
+            console.log(err);
+        }
+    });
 </script>
 
 {#if entranceManifests.length !== 0}
@@ -24,7 +42,7 @@
 				<h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
 					Date: {manifest.date}
 				</h5>
-				<Button href="manifests/manifestDetail?{manifest.id}">More details</Button>
+				<Button href="manifests/{manifest.id}">More details</Button>
 			</Card>
 		{/each}
 	</div>
@@ -50,7 +68,7 @@
 				<h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
 					Date: {manifest.date}
 				</h5>
-				<Button href="manifests/manifestDetail?{manifest.id}">More details</Button>
+				<Button href="manifests/{manifest.id}">More details</Button>
 			</Card>
 		{/each}
 	</div>
