@@ -11,7 +11,10 @@
   	import { baseURL } from '../../../environment';
 	import axios from 'axios';
 
-	let /** @type {string} */ username, /** @type {string} */ firstName, /** @type {string} */ lastName;
+	let /** @type {string} */ username, 
+		/** @type {string} */ firstName, 
+		/** @type {string} */ lastName,
+		/** @type {string} */ password;
 
 	onMount (async () => {
         try {
@@ -49,15 +52,13 @@
 		<Card>
 			<form on:submit|preventDefault={registerNewUser}>
 				<div class="mb-6">
-					<div>
-						<Input type="text" id="username" placeholder="Username" bind:value={username} required />
-					</div>
-					<div>
-						<Input type="text" id="firstName" placeholder="First name" bind:value={firstName} required />
-					</div>
-					<div>
-						<Input type="text" id="lastName" placeholder="Last name" bind:value={lastName} required />
-					</div>
+					<Input type="text" id="username" placeholder="Username" bind:value={username} required />
+					<br>
+					<Input type="text" id="firstName" placeholder="First name" bind:value={firstName} required />
+					<br>
+					<Input type="text" id="lastName" placeholder="Last name" bind:value={lastName} required />
+					<br>
+					<Input type="text" id="password" placeholder="Password" bind:value={password} required />
 				</div>
 				<Button type="submit">Submit</Button>
 			</form>

@@ -49,17 +49,24 @@
 								entrance_date: entranceDate, 
 								origin: origin
 							});
+		
+		entranceDate = "";
+		entranceRef = "";
+		origin = "";
 	}
 	
 	async function registerDepartureManifest() {
 		const instance = axios.create({ baseURL: baseURL });
-		
-		await instance.post('/new-departure-manifest', 
+		await instance.post('/departure_manifests', 
 							{
 								reference: departureRef, 
 								departure_date: departureDate, 
 								destination: destination
 							});
+		
+		departureDate = ""
+		departureRef = ""
+		destination = ""
 	}
 </script>
 
@@ -100,7 +107,7 @@
 </div>
 
 <Modal title="Entrance manifest" bind:open={openEntrance} size="xs" autoclose class="w-full">
-	<form on:submit|preventDefault={registerEntranceManifest}>
+	<form>
   		<div class="mb-6">
 			<div>
 				<Label for="entranceRef" class="mb-2">Reference</Label>
@@ -115,12 +122,12 @@
             	<Input type="text" id="origin" placeholder="Origin" bind:value={origin} required />
 			</div>
 		</div>
-		<Button type="submit">Submit</Button>
+		<Button on:click={() => registerEntranceManifest()}>Submit</Button>
 	</form>
 </Modal>
 
 <Modal title="Departure manifest" bind:open={openDeparture} size="xs" autoclose class="w-full">
-	<form on:submit|preventDefault={registerDepartureManifest}>
+	<form>
         <div class="mb-6">
             <div>
                 <Label for="departureRef" class="mb-2">Reference</Label>
@@ -135,7 +142,7 @@
                 <Input type="text" id="destination" placeholder="Destination" bind:value={destination} required />
             </div>
         </div>
-        <Button type="submit">Submit</Button>
+        <Button on:click={() => registerDepartureManifest()}>Submit</Button>
     </form>
 </Modal>
 

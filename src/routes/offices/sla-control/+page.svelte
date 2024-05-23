@@ -4,22 +4,40 @@
 
 <script>
 	import { Table, TableBody, TableHead, TableHeadCell, TableBodyRow, TableBodyCell, Card } from 'flowbite-svelte';
-	import { containers } from '../../../mocks/containers.js';
 	import { expiringSLAContainers } from '../../../mocks/expiringSLAContainers.js';
 	import { onMount } from 'svelte';
   	import { baseURL } from '../../../environment';
 	import axios from 'axios';
 	
+	let /** @type {
+		{
+			id: string,
+			product: {
+				productId: number,
+				producerId: number
+			},
+			quantity: number,
+			sla: {
+				SLA: string,
+				minTemp: number,
+				maxTemp: number,
+				minHum: number,
+				maxHum: number,
+				date_limit: string
+			},
+			status: number
+		}[]} */ slaContainers = []
+
 	onMount (async () => {
         try {
           //axios.defaults.withCredentials = true;
           const instance = axios.create({ baseURL: baseURL });
-          /*
-		  let res = await instance.get('/get-sla');
-          containers = res.data.slaContainers;
-		  res = await instance.get('/get-expiring-sla-containers');
-		  expiringSLAContainers = res.data.expiringSLAContainers;
-		  */
+          
+		  let res = await instance.get('/sla_containers');
+          slaContainers = res.data;
+		  //res = await instance.get('/get-expiring-sla-containers');
+		  //expiringSLAContainers = res.data.expiringSLAContainers;
+		  
         } catch (err) {
             console.log(err);
         }
@@ -40,10 +58,10 @@
     <TableHeadCell>Max hum</TableHeadCell>
   </TableHead>
   <TableBody>
-    {#each containers as container}
+    {#each slaContainers as container}
       <TableBodyRow>
         <TableBodyCell>{container.sla.SLA}</TableBodyCell>
-        <TableBodyCell>{container.sla.limit}</TableBodyCell>
+        <TableBodyCell>{container.sla.date_limit}</TableBodyCell>
         <TableBodyCell>{container.sla.minTemp}</TableBodyCell>
         <TableBodyCell>{container.sla.maxTemp}</TableBodyCell>
         <TableBodyCell>{container.sla.minHum}</TableBodyCell>
