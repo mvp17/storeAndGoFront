@@ -11,7 +11,7 @@
   import { baseURL } from '../../../../environment';
 	import axios from 'axios';
 
-  let manifestId;
+  let manifestId = "";
   onMount (async () => {
         try {
           manifestId = $page.params.manifestId;

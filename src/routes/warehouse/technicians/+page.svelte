@@ -8,52 +8,42 @@
 	import { baseURL } from '../../../environment';
 	import axios from 'axios';
 
+	let /** @type {
+		{
+			id: string,
+			type: number,
+			description: string,
+			room: string,
+			detail: string,
+			status: number,
+			date: string
+		}[]} */ technicianTasks = []
+
 	onMount (async () => {
         try {
             //axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
-            //const res = await instance.get('/get-technicians-tasks');
-            //tasks = res.data.tasks;
+            const res = await instance.get('/technician_tasks');
+            technicianTasks = res.data;
         } catch (err) {
             console.log(err);
         }
     });
 
-	let tasks = [
-		{
-			id: 1,
-			description: "Description 1",
-			detail: "Detail 1",
-			room: {
-				name: "Room 1"
-			},
-			taskStatus: 1
-		},
-		{
-			id: 2,
-			description: "Description 2",
-			detail: "Detail 2",
-			room: {
-				name: "Room 2"
-			},
-			taskStatus: 1
-		},
-	];
-
-	function complete(/** @type {number} */ taskId) {
+	function complete(/** @type {string} */ taskId) {
 		const instance = axios.create({ baseURL: baseURL });
 		//const res = await instance.post('/complete-task', {id: taskId});
 	}
 </script>
 
-{#each tasks as task}
+{#each technicianTasks as task}
 	<div class="grid gap-3 md:grid-cols-4" style="margin-bottom:5px">
-		{#if task.taskStatus < 3}
+		{#if task.status < 3}
 			<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
 				You have a new task!
 			</h5>
 		{/if}
-		{#if task.taskStatus < 4}
+		{#if task.status < 4}
 			<Card>
 				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 					Tasca {task.id}
@@ -62,7 +52,7 @@
 					Description: {task.description}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					Room: {task.room.name}
+					Room: {task.room}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
 					Details: {task.detail}
@@ -73,7 +63,7 @@
 	</div>
 {/each}
 
-{#if tasks.length === 0}
+{#if technicianTasks.length === 0}
 	<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
 		There are no new tasks.
 	</h5>

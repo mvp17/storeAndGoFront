@@ -4,17 +4,27 @@
 
 <script>
 	import { Card, Button } from 'flowbite-svelte';
-	import { rooms } from '../../../../mocks/rooms.js';
 	import { onMount } from 'svelte';
 	import { baseURL } from '../../../../environment';
 	import axios from 'axios';
+
+	let /** @type {
+		{
+			room_status: number,
+			pk: number,
+			name: string,
+			temp: number,
+			hum: number,
+			quantity: number,
+			threshold: number
+		}[]} */ rooms = [];
 
 	onMount (async () => {
         try {
             //axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
-            //const res = await instance.get('/get-rooms');
-            //rooms = res.data.rooms;
+            const res = await instance.get('/rooms');
+            rooms = res.data;
         } catch (err) {
             console.log(err);
         }
@@ -57,9 +67,9 @@
 					Hum: {room.hum}
 				</h5>
 			{/if}
-			{#if room.quantity && room.limit}
+			{#if room.quantity && room.threshold}
 				<h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-					Capacity: {room.quantity} / {room.limit}
+					Capacity: {room.quantity} / {room.threshold}
 				</h5>
 			{/if}
 			<div class="grid gap-3 md:grid-cols-3" style="margin-bottom:5px">

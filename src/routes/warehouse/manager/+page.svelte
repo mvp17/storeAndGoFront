@@ -5,7 +5,6 @@
 <script>
 	import { Card, Button, Modal, Input, Label } from 'flowbite-svelte';
 	import WarehouseMap from '../../../components/WarehouseMap.svelte';
-	import { lastTasks } from '../../../mocks/lastTasks.js';
 	import { baseURL } from '../../../environment';
 	import { onMount } from 'svelte';
 	import axios from 'axios';
@@ -15,62 +14,83 @@
 
 	let /** @type {string} */ departureRef, /** @type {string} */ departureDate, 
 		/** @type {string} */ destination, /** @type {boolean} */ openDeparture;
+	
+	let /** @type {
+		{
+			description: string,
+			containers: {
+				productId: number,
+				quantity: number
+			},
+			origin_room: {
+				name: string
+			},
+			destination_room: {
+				name: string
+			}
+		}[]} */ shipments = []
 
 	onMount (async () => {
         try {
             //axios.defaults.withCredentials = true;
             const instance = axios.create({ baseURL: baseURL });
-            //const res = await instance.get('/get-last-tasks');
-            //lastTasks = res.data.lastTasks;
+            const res = await instance.get('/shipments');
+            shipments = res.data;
         } catch (err) {
             console.log(err);
         }
     });
 
-	function registerEntranceManifest() {
+	async function registerEntranceManifest() {
 		const instance = axios.create({ baseURL: baseURL });
-		/*
-		await instance.post('/new-entrance-manifest', 
-							{ref: entranceRef, date: entranceDate, origin: origin});
-		*/
+		await instance.post('/entrance_manifests', 
+							{
+								reference: entranceRef, 
+								entrance_date: entranceDate, 
+								origin: origin
+							});
 	}
-	function registerDepartureManifest() {
+	
+	async function registerDepartureManifest() {
 		const instance = axios.create({ baseURL: baseURL });
-		/*
+		
 		await instance.post('/new-departure-manifest', 
-							{ref: departureRef, date: departureDate, destination: destination});
-		*/
+							{
+								reference: departureRef, 
+								departure_date: departureDate, 
+								destination: destination
+							});
 	}
 </script>
 
 <WarehouseMap></WarehouseMap>
 
-{#if lastTasks.length !== 0}
+{#if shipments.length !== 0}
 	<h1 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-		LAST TASKS
+		SHIPMENTS
 	</h1>
 	<div class="grid gap-3 md:grid-cols-4" style="margin-bottom:5px">
-		{#each lastTasks as lastTask}
+		{#each shipments as shipment}
 			<Card>
 				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-					{lastTask.description}
+					{shipment.description}
 				</h5>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					PRODUCT: {lastTask.containers.productId}
+					PRODUCT: {shipment.containers.productId}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					QUANTITY: {lastTask.containers.quantity}
+					QUANTITY: {shipment.containers.quantity}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					ORGN: {lastTask.originRoom.name}
-					DEST: {lastTask.destinationRoom.name}
+					ORGN: {shipment.origin_room.name}
+					DEST: {shipment.destination_room.name}
 				</p>
 			</Card>
 		{/each}
 	</div>
 	{:else}
 		<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-			TODAY THERE ARE NOT REGISTERED TASKS YET.
+			TODAY THERE ARE NOT REGISTERED SHIPMENTS YET.
 		</h5>
 {/if}
 
