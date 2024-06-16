@@ -5,8 +5,7 @@
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { baseURL } from '../../../../environment';
-	import axios from 'axios';
+	import { http } from '../../../../stores/http';
 
 	let /** @type {
 		{
@@ -20,10 +19,8 @@
 		}[]} */ rooms = [];
 
 	onMount (async () => {
-        try {
-            //axios.defaults.withCredentials = true;
-            const instance = axios.create({ baseURL: baseURL });
-            const res = await instance.get('/rooms');
+        try {           
+            const res = await $http.get('/rooms');
             rooms = res.data;
         } catch (err) {
             console.log(err);
@@ -33,14 +30,14 @@
 	function closeRoom(/** @type {number} */ roomId) {
 		// Backend post request changing room status for room with roomId
 		// Backend get request rooms
-		const instance = axios.create({ baseURL: baseURL });
+		//const instance = axios.create({ baseURL: baseURL });
 		//const res = await instance.patch('/close-room', {id: roomId});
 		console.log("close", roomId)
 	}
 	function openRoom(/** @type {number} */ roomId) {
 		// Backend post request changing room status for room with roomId
 		// Backend get request rooms
-		const instance = axios.create({ baseURL: baseURL });
+		//const instance = axios.create({ baseURL: baseURL });
 		//const res = await instance.patch('/open-room', {id: roomId});
 		console.log("open", roomId)
 	}

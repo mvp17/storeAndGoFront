@@ -8,8 +8,7 @@
 			 TableBodyCell } from 'flowbite-svelte';
 	import { users } from '../../../mocks/users.js';
 	import { onMount } from 'svelte';
-  	import { baseURL } from '../../../environment';
-	import axios from 'axios';
+	import { http } from '../../../stores/http';
 
 	let /** @type {string} */ username, 
 		/** @type {string} */ firstName, 
@@ -18,10 +17,8 @@
 
 	onMount (async () => {
         try {
-          //axios.defaults.withCredentials = true;
-          const instance = axios.create({ baseURL: baseURL });
           /*
-		  const res = await instance.get('/get-users');
+		  const res = await $http.get('/get-users');
           users = res.data.users;
 		  */
         } catch (err) {
@@ -30,18 +27,16 @@
     });
 
 	function registerNewUser () {
-		const instance = axios.create({ baseURL: baseURL });
-          /*
-		  await instance.post('/new-user', {username: username, firstName: firstName, lastName: lastName});
-		  await instance.get('/get-users');
-		  */
+		/*
+		await $http.post('/new-user', {username: username, firstName: firstName, lastName: lastName});
+		await $http.get('/get-users');
+		*/
 	}
 
 	function deleteUser (/** @type {number} */ userId) {
-		const instance = axios.create({ baseURL: baseURL });
 		/*
-		await instance.delete('/delete-user', {id: userId})
-		await instance.get('/get-users');
+		await $http.delete('/delete-user', {id: userId})
+		await $http.get('/get-users');
 		*/
 	}
 </script>

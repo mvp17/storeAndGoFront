@@ -5,8 +5,7 @@
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { baseURL } from '../../../environment';
-	import axios from 'axios';
+	import { http } from '../../../stores/http';
 
 	let /** @type {
 		{
@@ -27,9 +26,7 @@
 
 	onMount (async () => {
         try {
-            //axios.defaults.withCredentials = true;
-            const instance = axios.create({ baseURL: baseURL });
-            const res = await instance.get('/worker_tasks');
+            const res = await $http.get('/worker_tasks');
             workerTasks = res.data;
 			console.log(workerTasks)
         } catch (err) {
@@ -38,8 +35,7 @@
     });
 
 	function complete(/** @type { string } */ taskId) {
-		const instance = axios.create({ baseURL: baseURL });
-		//const res = await instance.post('/complete-task', {id: taskId});
+		//const res = await $http.post('/complete-task', {id: taskId});
 	}
 </script>
 

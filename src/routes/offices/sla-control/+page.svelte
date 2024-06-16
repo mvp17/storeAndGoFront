@@ -6,8 +6,7 @@
 	import { Table, TableBody, TableHead, TableHeadCell, TableBodyRow, TableBodyCell, Card } from 'flowbite-svelte';
 	import { expiringSLAContainers } from '../../../mocks/expiringSLAContainers.js';
 	import { onMount } from 'svelte';
-  	import { baseURL } from '../../../environment';
-	import axios from 'axios';
+	import { http } from '../../../stores/http';
 	
 	let /** @type {
 		{
@@ -30,10 +29,7 @@
 
 	onMount (async () => {
         try {
-          //axios.defaults.withCredentials = true;
-          const instance = axios.create({ baseURL: baseURL });
-          
-		  let res = await instance.get('/sla_containers');
+		  let res = await $http.get('/sla_containers');
           slaContainers = res.data;
 		  //res = await instance.get('/get-expiring-sla-containers');
 		  //expiringSLAContainers = res.data.expiringSLAContainers;

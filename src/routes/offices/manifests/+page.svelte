@@ -5,8 +5,7 @@
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-  	import { baseURL } from '../../../environment';
-	import axios from 'axios';
+	import { http } from '../../../stores/http';
 
 	let /** @type {
 		{
@@ -28,12 +27,9 @@
 
 	onMount (async () => {
         try {
-          //axios.defaults.withCredentials = true;
-          const instance = axios.create({ baseURL: baseURL });
-          
-		  let res = await instance.get('/entrance_manifests');
+		  let res = await $http.get('/entrance_manifests');
           entranceManifests = res.data;
-		  res = await instance.get('/departure_manifests');
+		  res = await $http.get('/departure_manifests');
           departureManifests = res.data;
 		  
         } catch (err) {

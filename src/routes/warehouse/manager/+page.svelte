@@ -5,9 +5,8 @@
 <script>
 	import { Card, Button, Modal, Input, Label } from 'flowbite-svelte';
 	import WarehouseMap from '../../../components/WarehouseMap.svelte';
-	import { baseURL } from '../../../environment';
 	import { onMount } from 'svelte';
-	import axios from 'axios';
+	import { http } from '../../../stores/http';
 
 	let /** @type {string} */ entranceRef, /** @type {string} */ entranceDate, 
 	    /** @type {string} */ origin, /** @type {boolean} */ openEntrance;
@@ -32,9 +31,7 @@
 
 	onMount (async () => {
         try {
-            //axios.defaults.withCredentials = true;
-            const instance = axios.create({ baseURL: baseURL });
-            const res = await instance.get('/shipments');
+            const res = await $http.get('/shipments');
             shipments = res.data;
         } catch (err) {
             console.log(err);
@@ -42,8 +39,7 @@
     });
 
 	async function registerEntranceManifest() {
-		const instance = axios.create({ baseURL: baseURL });
-		await instance.post('/entrance_manifests', 
+		await $http.post('/entrance_manifests', 
 							{
 								reference: entranceRef, 
 								entrance_date: entranceDate, 
@@ -56,8 +52,7 @@
 	}
 	
 	async function registerDepartureManifest() {
-		const instance = axios.create({ baseURL: baseURL });
-		await instance.post('/departure_manifests', 
+		await $http.post('/departure_manifests', 
 							{
 								reference: departureRef, 
 								departure_date: departureDate, 
