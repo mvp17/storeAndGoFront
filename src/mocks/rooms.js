@@ -6,7 +6,7 @@ export const rooms = [
     temp: 20,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -15,7 +15,7 @@ export const rooms = [
     temp: 21,
     hum: 16,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -24,7 +24,7 @@ export const rooms = [
     temp: 22,
     hum: 17,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -33,7 +33,7 @@ export const rooms = [
     temp: 23,
     hum: 18,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -42,7 +42,7 @@ export const rooms = [
     temp: 24,
     hum: 19,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -51,7 +51,7 @@ export const rooms = [
     temp: 25,
     hum: 20,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -60,7 +60,7 @@ export const rooms = [
     temp: 26,
     hum: 21,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -69,7 +69,7 @@ export const rooms = [
     temp: 27,
     hum: 22,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -78,7 +78,7 @@ export const rooms = [
     temp: 28,
     hum: 23,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -87,7 +87,7 @@ export const rooms = [
     temp: 29,
     hum: 24,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -96,7 +96,7 @@ export const rooms = [
     temp: 30,
     hum: 25,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -105,7 +105,7 @@ export const rooms = [
     temp: 31,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -114,7 +114,7 @@ export const rooms = [
     temp: 32,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -123,7 +123,7 @@ export const rooms = [
     temp: 25,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -132,7 +132,7 @@ export const rooms = [
     temp: 18,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     room_status: 1,
@@ -141,7 +141,7 @@ export const rooms = [
     temp: 10,
     hum: 15,
     quantity: 10,
-    limit: 20
+    threshold: 20
   },
   {
     pk: 16,

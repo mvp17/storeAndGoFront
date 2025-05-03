@@ -7,22 +7,7 @@
 	import { onMount } from 'svelte';
 	import { http } from '../../../stores/http';
 
-	let /** @type {
-		{
-			id: string,
-			description: string,
-			containers: {
-				product_id: number,
-				quantity: number
-			},
-			origin_room: {
-				name: string
-			},
-			destination_room: {
-				name: string
-			},
-			status: number
-		}[]} */ workerTasks = []
+	let workerTasks = []
 
 	onMount (async () => {
         try {

@@ -5,8 +5,6 @@
 <script>
 	import { Card, Breadcrumb, BreadcrumbItem, Button, Modal, Label, Input,
            Table, TableBody, TableHead, TableHeadCell, TableBodyRow, TableBodyCell } from 'flowbite-svelte';
-  import { containers } from '../../../../../mocks/containers.js';
-  import { tasks } from '../../../../../mocks/tasks.js';
   import { onMount } from 'svelte';
   import { baseURL } from '../../../../../environment';
 	import axios from 'axios';
@@ -21,8 +19,8 @@
     quantity: 10,
     limit: 20
   };
-  let open;
-  let newTemp;
+  let open = false;
+  let newTemp = 0;
   let roomId;
   onMount (async () => {
         try {

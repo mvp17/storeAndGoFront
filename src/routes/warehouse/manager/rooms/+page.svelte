@@ -1,47 +1,114 @@
-<svelte:head>
-	<title>Offices manifests</title>
-</svelte:head>
-
 <script>
-	import { Card, Button } from 'flowbite-svelte';
+	import { Card, Button, AccordionItem, Select, Accordion, Label, Input } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { http } from '../../../../stores/http';
 
-	let /** @type {
-		{
-			room_status: number,
-			pk: number,
-			name: string,
-			temp: number,
-			hum: number,
-			quantity: number,
-			threshold: number
-		}[]} */ rooms = [];
+	let rooms = [];
+	let room_status = '1';
+	let name = '';
+	let temp = '0';
+	let hum = '0';
+	let quantity = '0';
+	let threshold = '0';
 
-	onMount (async () => {
-        try {           
-            const res = await $http.get('/rooms');
-            rooms = res.data;
-        } catch (err) {
-            console.log(err);
-        }
-    });
+	onMount(async () => {
+		try {
+			await getRooms();
+		} catch (err) {
+			console.log(err);
+		}
+	});
 
-	function closeRoom(/** @type {number} */ roomId) {
-		// Backend post request changing room status for room with roomId
-		// Backend get request rooms
-		//const instance = axios.create({ baseURL: baseURL });
-		//const res = await instance.patch('/close-room', {id: roomId});
-		console.log("close", roomId)
+	async function closeRoom(/** @type {string} */ roomId) {
+		await $http.patch(`/rooms/${roomId}/close`);
 	}
-	function openRoom(/** @type {number} */ roomId) {
-		// Backend post request changing room status for room with roomId
-		// Backend get request rooms
-		//const instance = axios.create({ baseURL: baseURL });
-		//const res = await instance.patch('/open-room', {id: roomId});
-		console.log("open", roomId)
+
+	async function openRoom(/** @type {string} */ roomId) {
+		await $http.patch(`/rooms/${roomId}/open`);
+	}
+
+	async function getRooms() {
+		const res = await $http.get('/rooms');
+		rooms = res.data;
+	}
+
+	async function registerNewRoom() {
+		const reqBody = {
+			room_status: parseInt(room_status),
+			name: name,
+			temp: parseInt(temp),
+			hum: parseInt(hum),
+			quantity: parseInt(quantity),
+			threshold: parseInt(threshold)
+		};
+		await $http.post('/rooms', reqBody);
+		await getRooms();
+		resetForm();
+	}
+
+	function resetForm() {
+		room_status = '0';
+		name = '';
+		temp = '0';
+		hum = '0';
+		quantity = '0';
+		threshold = '0';
 	}
 </script>
+
+<svelte:head>
+	<title>Warehouse manager rooms</title>
+</svelte:head>
+
+<Accordion>
+	<AccordionItem>
+		<span slot="header">Create Room</span>
+		<Card>
+			<form on:submit|preventDefault={registerNewRoom}>
+				<div class="mb-6">
+					<Label for="roomStatus" class="mb-1">Room Status</Label>
+					<Select id="roomStatus" bind:value={room_status} required>
+						<option value="0">Closed</option>
+						<option value="1">Opened</option>
+					</Select>
+					<br />
+					<Label for="name" class="mb-1">Name</Label>
+					<Input type="text" id="name" placeholder="Name" bind:value={name} required />
+					<br />
+					<Label for="temp" class="mb-1">Temperature</Label>
+					<Input type="number" id="temp" placeholder="Temperature" bind:value={temp} required />
+					<br />
+					<Label for="hum" class="mb-1">Humidity</Label>
+					<Input type="number" min="0" id="hum" placeholder="Humidity" bind:value={hum} required />
+					<br />
+					<Label for="quantity" class="mb-1">Quantity</Label>
+					<Input
+						type="number"
+						min="0"
+						id="quantity"
+						placeholder="Quantity"
+						bind:value={quantity}
+						required
+					/>
+					<br />
+					<Label for="threshold" class="mb-1">Threshold</Label>
+					<Input
+						type="number"
+						min="0"
+						id="threshold"
+						placeholder="Threshold"
+						bind:value={threshold}
+						required
+					/>
+					<br />
+				</div>
+				<Button type="submit">Submit</Button>
+			</form>
+		</Card>
+	</AccordionItem>
+</Accordion>
+
+<br />
 
 <div class="grid gap-3 md:grid-cols-4" style="margin-bottom:5px">
 	{#each rooms as room}
@@ -70,13 +137,13 @@
 				</h5>
 			{/if}
 			<div class="grid gap-3 md:grid-cols-3" style="margin-bottom:5px">
-			{#if room.room_status === 1}
-				<Button on:click={() => closeRoom(room.pk)}>Close room</Button>
-				<Button href="/warehouse/manager/rooms/{room.pk}">Show room</Button>
-			{/if}
-			{#if room.room_status === 0}
-				<Button on:click={() => openRoom(room.pk)}>Open room</Button>
-			{/if}
+				{#if room.room_status === 1}
+					<Button on:click={() => closeRoom(room.id)}>Close room</Button>
+					<Button href="/warehouse/manager/rooms/{room.id}">Show room</Button>
+				{/if}
+				{#if room.room_status === 0}
+					<Button on:click={() => openRoom(room.id)}>Open room</Button>
+				{/if}
 			</div>
 		</Card>
 	{/each}
