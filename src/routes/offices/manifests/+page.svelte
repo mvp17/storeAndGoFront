@@ -1,7 +1,3 @@
-<svelte:head>
-	<title>Offices manifests</title>
-</svelte:head>
-
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
@@ -14,7 +10,7 @@
 			origin: string,
 			reference: string
 		} []
-	} */ entranceManifests = []
+	} */ entranceManifests = [];
 
 	let /** @type {
 		{
@@ -23,24 +19,27 @@
 			destination: string,
 			reference: string
 		} []
-	} */ departureManifests = []
+	} */ departureManifests = [];
 
-	onMount (async () => {
-        try {
-		  let res = await $http.get('/entrance_manifests');
-          entranceManifests = res.data;
-		  res = await $http.get('/departure_manifests');
-          departureManifests = res.data;
-		  
-        } catch (err) {
-            console.log(err);
-        }
-    });
+	onMount(async () => {
+		try {
+			let res = await $http.get('/entrance_manifests');
+			entranceManifests = res.data;
+			res = await $http.get('/departure_manifests');
+			departureManifests = res.data;
+		} catch (err) {
+			console.log(err);
+		}
+	});
 </script>
+
+<svelte:head>
+	<title>Offices manifests</title>
+</svelte:head>
 
 {#if entranceManifests.length !== 0}
 	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    	Entrance manifests
+		Entrance manifests
 	</h1>
 	<div class="grid gap-3 md:grid-cols-3">
 		{#each entranceManifests as manifest}
@@ -60,13 +59,13 @@
 	</div>
 {:else}
 	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    	There are no entrance manifests
+		There are no entrance manifests
 	</h1>
 {/if}
 
 {#if departureManifests.length !== 0}
 	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    	Departure manifests
+		Departure manifests
 	</h1>
 	<div class="grid gap-3 md:grid-cols-3">
 		{#each departureManifests as manifest}
@@ -86,11 +85,13 @@
 	</div>
 {:else}
 	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    	There are no departure manifests
+		There are no departure manifests
 	</h1>
 {/if}
 
-
 <style>
-	h1 {text-align: center; margin-top: 15px;}
+	h1 {
+		text-align: center;
+		margin-top: 15px;
+	}
 </style>

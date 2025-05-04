@@ -1,45 +1,43 @@
 <script>
-    import { Card } from 'flowbite-svelte';
-    import AuthGuard from './signin/AuthGuard.svelte';
-    import { page } from '$app/stores';
+	import { Card } from 'flowbite-svelte';
+	import AuthGuard from './signin/AuthGuard.svelte';
+	import { page } from '$app/stores';
 </script>
 
 <AuthGuard>
-    <span slot="authed">
-        <div class="grid md:grid-cols-2">
-            <Card href="/warehouse">
-                <p class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    Warehouse
-                </p>
-            </Card>
-            <Card href="/offices">
-                <p class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    Offices
-                </p>
-            </Card>
-        </div>
-    </span>
+	<span slot="authed">
+		<div class="grid md:grid-cols-2">
+			<Card href="/warehouse">
+				<p class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+					Warehouse
+				</p>
+			</Card>
+			<Card href="/offices">
+				<p class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Offices</p>
+			</Card>
+		</div>
+	</span>
 </AuthGuard>
 
 <AuthGuard>
-    <span slot="not_authed">
-        <nav>
-            <svg viewBox="0 0 2 3" aria-hidden="true">
-                <path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-            </svg>
-            <ul>
-                <li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
-                    <a href="/signup">Sign up</a>
-                </li>
-                <li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
-                    <a href="/signin">Sign in</a>
-                </li>
-            </ul>			
-            <svg viewBox="0 0 2 3" aria-hidden="true">
-                <path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-            </svg>
-        </nav>
-    </span>
+	<span slot="not_authed">
+		<nav>
+			<svg viewBox="0 0 2 3" aria-hidden="true">
+				<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
+			</svg>
+			<ul>
+				<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+					<a href="/signup">Sign up</a>
+				</li>
+				<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+					<a href="/signin">Sign in</a>
+				</li>
+			</ul>
+			<svg viewBox="0 0 2 3" aria-hidden="true">
+				<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
+			</svg>
+		</nav>
+	</span>
 </AuthGuard>
 
 <style>

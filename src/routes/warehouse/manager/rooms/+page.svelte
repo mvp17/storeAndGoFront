@@ -20,11 +20,31 @@
 	});
 
 	async function closeRoom(/** @type {string} */ roomId) {
-		await $http.patch(`/rooms/${roomId}/close`);
+		const res = await $http.get(`/rooms/${roomId}`);
+		const currentRoom = res.data;
+		await $http.patch(`/rooms/${roomId}`, {
+			room_status: 0,
+			name: currentRoom.name,
+			temp: currentRoom.temp,
+			hum: currentRoom.hum,
+			quantity: currentRoom.quantity,
+			threshold: currentRoom.threshold
+		});
+		await getRooms();
 	}
 
 	async function openRoom(/** @type {string} */ roomId) {
-		await $http.patch(`/rooms/${roomId}/open`);
+		const res = await $http.get(`/rooms/${roomId}`);
+		const currentRoom = res.data;
+		await $http.patch(`/rooms/${roomId}`, {
+			room_status: 1,
+			name: currentRoom.name,
+			temp: currentRoom.temp,
+			hum: currentRoom.hum,
+			quantity: currentRoom.quantity,
+			threshold: currentRoom.threshold
+		});
+		await getRooms();
 	}
 
 	async function getRooms() {

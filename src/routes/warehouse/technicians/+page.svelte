@@ -1,7 +1,3 @@
-<svelte:head>
-	<title>Warehouse</title>
-</svelte:head>
-
 <script>
 	import { Card, Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
@@ -16,28 +12,30 @@
 			detail: string,
 			status: number,
 			date: string
-		}[]} */ technicianTasks = []
+		}[]} */ technicianTasks = [];
 
-	onMount (async () => {
-        try {
-            const res = await $http.get('/technician_tasks');
-            technicianTasks = res.data;
-        } catch (err) {
-            console.log(err);
-        }
-    });
+	onMount(async () => {
+		try {
+			const res = await $http.get('/technician_tasks');
+			technicianTasks = res.data;
+		} catch (err) {
+			console.log(err);
+		}
+	});
 
 	function complete(/** @type {string} */ taskId) {
 		//const res = await $http.post('/complete-task', {id: taskId});
 	}
 </script>
 
+<svelte:head>
+	<title>Warehouse</title>
+</svelte:head>
+
 {#each technicianTasks as task}
 	<div class="grid gap-3 md:grid-cols-4" style="margin-bottom:5px">
 		{#if task.status < 3}
-			<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-				You have a new task!
-			</h5>
+			<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">You have a new task!</h5>
 		{/if}
 		{#if task.status < 4}
 			<Card>
@@ -53,14 +51,16 @@
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
 					Details: {task.detail}
 				</p>
-				<Button on:click={() => { complete(task.id) }}>Complete</Button>
+				<Button
+					on:click={() => {
+						complete(task.id);
+					}}>Complete</Button
+				>
 			</Card>
 		{/if}
 	</div>
 {/each}
 
 {#if technicianTasks.length === 0}
-	<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-		There are no new tasks.
-	</h5>
+	<h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">There are no new tasks.</h5>
 {/if}

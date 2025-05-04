@@ -66,8 +66,8 @@
 		const reqBody = {
 			description: description,
 			containers: containersR,
-			origin_room: {name: origin_room},
-			destination_room: {name: destination_room},
+			origin_room: { name: origin_room },
+			destination_room: { name: destination_room },
 			status: parseInt(status)
 		};
 		await $http.post('/worker_tasks', reqBody);
@@ -186,10 +186,10 @@
 					}}>Delete</Button
 				>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					ORIGIN ROOM: {task.room}
+					ORIGIN ROOM: {task.origin_room.name}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					DETAIL: {task.detail}
+					DEST ROOM: {task.destination_room.name}
 				</p>
 				<Button
 					on:click={() => {
@@ -209,10 +209,10 @@
 					{task.description}
 				</h5>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					ROOM: {task.room}
+					ORIGIN ROOM: {task.origin_room.name}
 				</p>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-					DETAIL: {task.detail}
+					DEST ROOM: {task.destination_room.name}
 				</p>
 			</Card>
 		{/each}
