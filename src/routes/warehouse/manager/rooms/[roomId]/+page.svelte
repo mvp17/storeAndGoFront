@@ -17,7 +17,7 @@
 	import { onMount } from 'svelte';
 	import { baseURL } from '../../../../../environment';
 	import axios from 'axios';
-	import { page } from '$app/stores';
+	import { http } from '../../../../../stores/http';
 
 	const room = {
 		room_status: 1,
@@ -30,14 +30,16 @@
 	};
 	let open = false;
 	let newTemp = 0;
-	let roomId;
+	
+	export let data;
+	const roomId = data.roomId;
+	
 	onMount(async () => {
 		try {
-			roomId = $page.params.roomId;
-			//axios.defaults.withCredentials = true;
-			const instance = axios.create({ baseURL: baseURL });
-			//const res = await instance.get('/get-room', {id: roomId});
-			//room = res.data.room;
+			console.log(roomId)
+			const res = await $http.get(`/rooms/${roomId}`);
+			console.log(res.data);
+			
 		} catch (err) {
 			console.log(err);
 		}
@@ -78,20 +80,20 @@
 		<TableHeadCell>Date limit</TableHeadCell>
 	</TableHead>
 	<TableBody>
-		{#each containers as container}
+		<!-- {#each containers as container}
 			<TableBodyRow>
-				<!-- Main info -->
+				
 				<TableBodyCell>{container.product.productId}</TableBodyCell>
 				<TableBodyCell>{container.product.producerId}</TableBodyCell>
 				<TableBodyCell>{container.quantity}</TableBodyCell>
-				<!-- Temperatures -->
+				
 				<TableBodyCell>{container.sla.minTemp}</TableBodyCell>
 				<TableBodyCell>{container.sla.maxTemp}</TableBodyCell>
 				<TableBodyCell>{container.sla.minHum}</TableBodyCell>
 				<TableBodyCell>{container.sla.maxHum}</TableBodyCell>
 				<TableBodyCell>{container.sla.limit}</TableBodyCell>
 			</TableBodyRow>
-		{/each}
+		{/each} -->
 	</TableBody>
 </Table>
 
@@ -136,7 +138,7 @@
 <h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tasks</h1>
 
 <div class="grid gap-3 md:grid-cols-3">
-	{#each tasks as task}
+	<!-- {#each tasks as task}
 		<Card>
 			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 				{task.description}
@@ -152,7 +154,7 @@
 				DEST: {task.destinationRoom.name}
 			</p>
 		</Card>
-	{/each}
+	{/each} -->
 </div>
 
 <Modal title="Update temperature" bind:open size="xs" autoclose class="w-full">

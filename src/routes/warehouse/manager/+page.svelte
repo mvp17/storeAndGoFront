@@ -67,7 +67,7 @@
 	<title>Manager Home</title>
 </svelte:head>
 
-<WarehouseMap></WarehouseMap>
+<WarehouseMap />
 
 {#if shipments.length !== 0}
 	<h1 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">SHIPMENTS</h1>
