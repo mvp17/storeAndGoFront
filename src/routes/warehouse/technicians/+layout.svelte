@@ -1,9 +1,10 @@
 <script>
 	import TechniciansHeader from '../../../components/headers/TechniciansHeader.svelte';
+	export let data;
 </script>
 
 <div class="app">
-	<TechniciansHeader />
+	<TechniciansHeader currentPath={data.currentPath}/>
 	<main>
 		<slot />
 	</main>

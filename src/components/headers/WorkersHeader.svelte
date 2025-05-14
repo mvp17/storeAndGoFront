@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	export let currentPath;
 	import AuthGuard from '../../routes/signin/AuthGuard.svelte';
 </script>
 
@@ -11,7 +11,7 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/warehouse">Logout</a>
 					</li>
 				</ul>
@@ -28,13 +28,13 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signup' ? 'page' : undefined}>
 						<a href="/signup">Sign up</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signin' ? 'page' : undefined}>
 						<a href="/signin">Sign in</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/">Back</a>
 					</li>
 				</ul>

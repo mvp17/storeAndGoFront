@@ -1,6 +1,6 @@
 <script>
-	import { page } from '$app/stores';
 	import AuthGuard from '../../routes/signin/AuthGuard.svelte';
+	export let currentPath;
 </script>
 
 <header>
@@ -11,27 +11,27 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/warehouse/manager' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/warehouse/manager' ? 'page' : undefined}>
 						<a href="/warehouse/manager">Home</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/warehouse/manager/rooms' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/warehouse/manager/rooms' ? 'page' : undefined}>
 						<a href="/warehouse/manager/rooms">Rooms</a>
 					</li>
 					<li
-						aria-current={$page.url.pathname === '/warehouse/manager/workersTasks'
+						aria-current={currentPath === '/warehouse/manager/workersTasks'
 							? 'page'
 							: undefined}
 					>
 						<a href="/warehouse/manager/workersTasks">Workers Tasks</a>
 					</li>
 					<li
-						aria-current={$page.url.pathname === '/warehouse/manager/techniciansTasks'
+						aria-current={currentPath === '/warehouse/manager/techniciansTasks'
 							? 'page'
 							: undefined}
 					>
 						<a href="/warehouse/manager/techniciansTasks">Technicians Tasks</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/warehouse">Logout</a>
 					</li>
 				</ul>
@@ -48,13 +48,13 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signup' ? 'page' : undefined}>
 						<a href="/signup">Sign up</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signin' ? 'page' : undefined}>
 						<a href="/signin">Sign in</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/">Back</a>
 					</li>
 				</ul>

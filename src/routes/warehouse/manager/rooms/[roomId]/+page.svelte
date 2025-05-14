@@ -15,11 +15,9 @@
 		TableBodyCell
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { baseURL } from '../../../../../environment';
-	import axios from 'axios';
 	import { http } from '../../../../../stores/http';
 
-	const room = {
+	let room = {
 		room_status: 1,
 		pk: 14,
 		name: 'Sala F5',
@@ -39,20 +37,18 @@
 			console.log(roomId)
 			const res = await $http.get(`/rooms/${roomId}`);
 			console.log(res.data);
-			
+			let room = res.data			
 		} catch (err) {
 			console.log(err);
 		}
 	});
 
 	function transfer() {
-		const instance = axios.create({ baseURL: baseURL });
 		//const res = await instance.get('/transfer-room', {id: roomId});
 	}
 
 	function updateTemp() {
 		console.log(newTemp);
-		const instance = axios.create({ baseURL: baseURL });
 		//const res = await instance.get('/update-temperature-room', {id: roomId, temperature: newTemp});
 	}
 </script>

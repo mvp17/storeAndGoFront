@@ -1,9 +1,10 @@
 <script>
 	import WorkersHeader from '../../../components/headers/WorkersHeader.svelte';
+	export let data;
 </script>
 
 <div class="app">
-	<WorkersHeader />
+	<WorkersHeader currentPath={data.currentPath}/>
 	<main>
 		<slot />
 	</main>

@@ -1,7 +1,7 @@
 <script>
 	import { Card } from 'flowbite-svelte';
 	import AuthGuard from './signin/AuthGuard.svelte';
-	import { page } from '$app/stores';
+	export let data;
 </script>
 
 <AuthGuard>
@@ -26,10 +26,10 @@
 				<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 			</svg>
 			<ul>
-				<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+				<li aria-current={data.currentPath === '/signup' ? 'page' : undefined}>
 					<a href="/signup">Sign up</a>
 				</li>
-				<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+				<li aria-current={data.currentPath === '/signin' ? 'page' : undefined}>
 					<a href="/signin">Sign in</a>
 				</li>
 			</ul>

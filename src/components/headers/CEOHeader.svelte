@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	export let currentPath;
 	import AuthGuard from '../../routes/signin/AuthGuard.svelte';
 </script>
 
@@ -11,19 +11,19 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/offices' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/offices' ? 'page' : undefined}>
 						<a href="/offices">Home</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/offices/manifests' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/offices/manifests' ? 'page' : undefined}>
 						<a href="/offices/manifests">Manifests</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/offices/sla-control' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/offices/sla-control' ? 'page' : undefined}>
 						<a href="/offices/sla-control">SLA Control</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/offices/users' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/offices/users' ? 'page' : undefined}>
 						<a href="/offices/users">Users</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/">Logout</a>
 					</li>
 				</ul>
@@ -40,13 +40,13 @@
 					<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 				</svg>
 				<ul>
-					<li aria-current={$page.url.pathname === '/signup' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signup' ? 'page' : undefined}>
 						<a href="/signup">Sign up</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/signin' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/signin' ? 'page' : undefined}>
 						<a href="/signin">Sign in</a>
 					</li>
-					<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<li aria-current={currentPath === '/' ? 'page' : undefined}>
 						<a href="/">Back</a>
 					</li>
 				</ul>

@@ -1,9 +1,10 @@
 <script>
 	import ManagerHeader from '../../../components/headers/ManagerHeader.svelte';
+	export let data;
 </script>
 
 <div class="app">
-	<ManagerHeader />
+	<ManagerHeader currentPath={data.currentPath}/>
 	<main>
 		<slot />
 	</main>

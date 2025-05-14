@@ -1,6 +1,5 @@
 <script>
 	import warehouse from '$lib/images/warehouse.png';
-	import { capacities } from '../mocks/capacities.js';
 	import { onMount } from 'svelte';
 	import { http } from '../stores/http.js';
 	import { goto } from '$app/navigation';
@@ -74,28 +73,33 @@
 		<map name="map-warehouse">
 			<!-- Sala 1 -->
 			{#if Sala1.room_status === 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
+					class="cursor-pointer"
 					coords="3, 0, 280, 125"
-					
-					href="manager/rooms/{Sala1.id}"
-					title="SALA {Sala1.name}
-          --------------------------------
-          Temperatura:  {Sala1.temp}º
-          Humitat:      {Sala1.hum}%
-          Capacitat:    {capacities[1]}%"
+					on:click={() => goToRoom(Sala1.id)}
+					title="{Sala1.name}
+							--------------------------------
+							Temperatura:  {Sala1.temp}º
+							Humitat:      {Sala1.hum}%
+							Capacitat:    {(Sala1.quantity / Sala1.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
+					class="cursor-pointer"
 					coords="3, 0, 280, 125"
-					href="manager/rooms/{Sala1.id}"
-					title="SALA {Sala1.name}
-          --------------------------------
-          TANCADA"
+					on:click={() => goToRoom(Sala1.id)}
+					title="{Sala1.name}
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
@@ -110,11 +114,11 @@
 					class="cursor-pointer"
 					coords="280, 0, 560, 125"
 					on:click={() => goToRoom(Sala2.id)}
-					title="SALA {Sala2.name}
-          --------------------------------
-          Temperatura:  {Sala2.temp}º
-          Humitat:      {Sala2.hum}%
-          Capacitat:    {capacities[2]}%"
+					title="{Sala2.name}
+							--------------------------------
+							Temperatura:  {Sala2.temp}º
+							Humitat:      {Sala2.hum}%
+							Capacitat:    {(Sala2.quantity / Sala2.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
@@ -126,399 +130,486 @@
 					class="cursor-pointer"
 					coords="280, 0, 560, 125"
 					on:click={() => goToRoom(Sala2.id)}
-					title="SALA {Sala2.name}
-          --------------------------------
-          TANCADA"
+					title="{Sala2.name}
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala A -->
 			{#if SalaA.room_status}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaA.id)}
 					coords="3, 127, 105, 248"
-					href="manager/rooms/roomId?{SalaA.id}"
-					title="SALA {SalaA.name}
-          --------------------------------
-          Temperatura:  {SalaA.temp}º
-          Humitat:      {SalaA.hum}%
-          Capacitat:    {capacities[2]}%"
+					title="{SalaA.name}
+							--------------------------------
+							Temperatura:  {SalaA.temp}º
+							Humitat:      {SalaA.hum}%
+							Capacitat:    {(SalaA.quantity / SalaA.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="3, 127, 105, 248"
-					href="manager/rooms/roomId?{SalaA.id}"
-					title="SALA {SalaA.name}
-          --------------------------------
-          TANCADA"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaA.id)}
+					title="{SalaA.name}
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala B -->
 			{#if SalaB.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="3, 250, 105, 360"
-					href="manager/rooms/roomId?{SalaB.id}"
-					title="SALA {SalaB.name}
-          --------------------------------
-          Temperatura:  {SalaB.temp}º
-          Humitat:      {SalaB.hum}%
-          Capacitat:    {capacities[3]}%"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaB.id)}
+					title="{SalaB.name}
+							--------------------------------
+							Temperatura:  {SalaB.temp}º
+							Humitat:      {SalaB.hum}%
+							Capacitat:    {(SalaB.quantity / SalaB.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="3, 250, 105, 360"
-					href="manager/rooms/roomId?{SalaB.id}"
-					title="SALA {SalaB.name}
-          --------------------------------
-          TANCADA"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaB.id)}
+					title="{SalaB.name}
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala C -->
 			{#if SalaC.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="3, 362, 105, 495"
-					href="manager/rooms/roomId?{SalaC.id}"
-					title="SALA {SalaC.name}
-          --------------------------------
-          Temperatura:  {SalaC.temp}º
-          Humitat:      {SalaC.hum}%
-          Capacitat:    {capacities[4]}%"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaC.id)}
+					title="{SalaC.name}
+							--------------------------------
+							Temperatura:  {SalaC.temp}º
+							Humitat:      {SalaC.hum}%
+							Capacitat:    {(SalaC.quantity / SalaC.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="3, 362, 105, 495"
-					href="manager/rooms/roomId?{SalaC.id}"
-					title="SALA {SalaC.name}
-          --------------------------------
-          TANCADA"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaC.id)}
+					title="{SalaC.name}
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala M1-->
 			{#if SalaM1.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="478, 127, 560, 190"
-					href="manager/rooms/roomId?{SalaM1.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM1.id)}
 					title="{SalaM1.name}
-          --------------------------------
-          Temperatura:  {SalaM1.temp}º
-          Humitat:      {SalaM1.hum}%
-          Capacitat:    {capacities[5]}%"
+							--------------------------------
+							Temperatura:  {SalaM1.temp}º
+							Humitat:      {SalaM1.hum}%
+							Capacitat:    {(SalaM1.quantity / SalaM1.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="478, 127, 560, 190"
-					href="manager/rooms/roomId?{SalaM1.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM1.id)}
 					title="{SalaM1.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala M2-->
 			{#if SalaM2.room_status}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 192, 560, 256"
-					href="manager/rooms/roomId?{SalaM2.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM2.id)}
 					title="{SalaM2.name}
-          --------------------------------
-          Temperatura:  {SalaM2.temp}º
-          Humitat:      {SalaM2.hum}%
-          Capacitat:    {capacities[6]}%"
+							--------------------------------
+							Temperatura:  {SalaM2.temp}º
+							Humitat:      {SalaM2.hum}%
+							Capacitat:    {(SalaM2.quantity / SalaM2.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 192, 560, 256"
-					href="manager/rooms/roomId?{SalaM2.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM2.id)}
 					title="{SalaM2.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala M3-->
 			{#if SalaM3.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 258, 560, 321"
-					href="manager/rooms/roomId?{SalaM3.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM3.id)}
 					title="{SalaM3.name}
-          --------------------------------
-          Temperatura:  {SalaM3.temp}º
-          Humitat:      {SalaM3.hum}%
-          Capacitat:    {capacities[7]}%"
+							--------------------------------
+							Temperatura:  {SalaM3.temp}º
+							Humitat:      {SalaM3.hum}%
+							Capacitat:    {(SalaM3.quantity / SalaM3.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 258, 560, 321"
-					href="manager/rooms/roomId?{SalaM3.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaM3.id)}
 					title="{SalaM3.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F7-->
 			{#if SalaF7.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 323, 560, 387"
-					href="manager/rooms/roomId?{SalaF7.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF7.id)}
 					title="{SalaF7.name}
-          --------------------------------
-          Temperatura:  {SalaF7.temp}º
-          Humitat:      {SalaF7.hum}%
-          Capacitat:    {capacities[8]}%"
+							--------------------------------
+							Temperatura:  {SalaF7.temp}º
+							Humitat:      {SalaF7.hum}%
+							Capacitat:    {(SalaF7.quantity / SalaF7.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="479, 323, 560, 387"
-					href="manager/rooms/roomId?{SalaF7.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF7.id)}
 					title="{SalaF7.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F7-->
 			{#if SalaF7.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
-					coords="479, 389, 560, 512"
-					href="manager/rooms/roomId?{SalaF7.id}"
+					coords="479, 323, 560, 387"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF7.id)}
 					title="{SalaF7.name}
-          --------------------------------
-          Temperatura:  {SalaF7.temp}º
-          Humitat:      {SalaF7.hum}%
-          Capacitat:    {capacities[9]}%"
+							--------------------------------
+							Temperatura:  {SalaF7.temp}º
+							Humitat:      {SalaF7.hum}%
+							Capacitat:    {(SalaF7.quantity / SalaF7.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
-					coords="479, 389, 560, 512"
-					href="manager/rooms/roomId?{SalaF7.id}"
+					coords="479, 323, 560, 387"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF7.id)}
 					title="{SalaF7.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F1-->
 			{#if SalaF1.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 182, 410, 235"
-					href="manager/rooms/roomId?{SalaF1.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF1.id)}
 					title="{SalaF1.name}
-          --------------------------------
-          Temperatura:  {SalaF1.temp}º
-          Humitat:      {SalaF1.hum}%
-          Capacitat:    {capacities[10]}%"
+							--------------------------------
+							Temperatura:  {SalaF1.temp}º
+							Humitat:      {SalaF1.hum}%
+							Capacitat:    {(SalaF1.quantity / SalaF1.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 182, 410, 235"
-					href="manager/rooms/roomId?{SalaF1.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF1.id)}
 					title="{SalaF1.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 				/>
 			{/if}
 
 			<!-- Sala F2-->
 			{#if SalaF2.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 237, 410, 289"
-					href="manager/rooms/roomId?{SalaF2.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF2.id)}
 					title="{SalaF2.name}
-          --------------------------------
-          Temperatura:  {SalaF2.temp}º
-          Humitat:      {SalaF2.hum}%
-          Capacitat:    {capacities[11]}%"
+							--------------------------------
+							Temperatura:  {SalaF2.temp}º
+							Humitat:      {SalaF2.hum}%
+							Capacitat:    {(SalaF2.quantity / SalaF2.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 237, 410, 289"
-					href="manager/rooms/roomId?{SalaF2.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF2.id)}
 					title="{SalaF2.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F3-->
 			{#if SalaF3.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 291, 410, 345"
-					href="manager/rooms/roomId?{SalaF3.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF3.id)}
 					title="{SalaF3.name}
-          --------------------------------
-          Temperatura:  {SalaF3.temp}º
-          Humitat:      {SalaF3.hum}%
-          Capacitat:    {capacities[12]}%"
+							--------------------------------
+							Temperatura:  {SalaF3.temp}º
+							Humitat:      {SalaF3.hum}%
+							Capacitat:    {(SalaF3.quantity / SalaF3.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 291, 410, 345"
-					href="manager/rooms/roomId?{SalaF3.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF3.id)}
 					title="{SalaF3.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F4-->
 			{#if SalaF4.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 347, 410, 399"
-					href="manager/rooms/roomId?{SalaF4.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF4.id)}
 					title="{SalaF4.name}
-          --------------------------------
-          Temperatura:  {SalaF4.temp}º
-          Humitat:      {SalaF4.hum}%
-          Capacitat:    {capacities[13]}%"
+							--------------------------------
+							Temperatura:  {SalaF4.temp}º
+							Humitat:      {SalaF4.hum}%
+							Capacitat:    {(SalaF4.quantity / SalaF4.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 347, 410, 399"
-					href="manager/rooms/roomId?{SalaF4.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF4.id)}
 					title="{SalaF4.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F5-->
 			{#if SalaF5.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 401, 410, 454"
-					href="manager/rooms/roomId?{SalaF5.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF5.id)}
 					title="{SalaF5.name}
-          --------------------------------
-          Temperatura:  {SalaF5.temp}º
-          Humitat:      {SalaF5.hum}%
-          Capacitat:    {capacities[14]}%"
+							--------------------------------
+							Temperatura:  {SalaF5.temp}º
+							Humitat:      {SalaF5.hum}%
+							Capacitat:    {(SalaF5.quantity / SalaF5.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 401, 410, 454"
-					href="manager/rooms/roomId?{SalaF5.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF5.id)}
 					title="{SalaF5.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Sala F6-->
 			{#if SalaF6.room_status == 1}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 456, 410, 509"
-					href="manager/rooms/roomId?{SalaF6.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF6.id)}
 					title="{SalaF6.name}
-          --------------------------------
-          Temperatura:  {SalaF6.temp}º
-          Humitat:      {SalaF6.hum}%
-          Capacitat:    {capacities[15]}%"
+							--------------------------------
+							Temperatura:  {SalaF6.temp}º
+							Humitat:      {SalaF6.hum}%
+							Capacitat:    {(SalaF6.quantity / SalaF6.threshold) * 100}%"
 					data-toggle="tooltip"
 				/>
 			{:else}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<area
 					shape="rect"
 					alt=""
 					coords="348, 456, 410, 509"
-					href="manager/rooms/roomId?{SalaF6.id}"
+					class="cursor-pointer"
+					on:click={() => goToRoom(SalaF6.id)}
 					title="{SalaF6.name}
-          --------------------------------
-          TANCADA"
+							--------------------------------
+							TANCADA"
 					data-toggle="tooltip"
 				/>
 			{/if}
 
 			<!-- Moll càrrega -->
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<area
 				shape="rect"
 				alt=""
 				coords="39, 558, 292, 664"
-				href="manager/rooms/roomId?{MollCarrega.id}"
+				class="cursor-pointer"
+				on:click={() => goToRoom(MollCarrega.id)}
 				title="{MollCarrega.name}
-        --------------------------------
-        Capacitat: {capacities[16]}%"
+						--------------------------------
+						Capacitat: {(MollCarrega.quantity / MollCarrega.threshold) * 100}%"
 				data-toggle="tooltip"
 			/>
 		</map>

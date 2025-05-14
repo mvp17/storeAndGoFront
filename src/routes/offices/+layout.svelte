@@ -1,9 +1,10 @@
 <script>
 	import CEOHeader from '../../components/headers/CEOHeader.svelte';
+	export let data;
 </script>
 
 <div class="app">
-	<CEOHeader />
+	<CEOHeader currentPath={data.currentPath}/>
 	<main>
 		<slot />
 	</main>
