@@ -56,7 +56,6 @@
 	async function getTechnicianTasks() {
 		const res = await $http.get('/technician_tasks');
 		let technicianTasks = res.data;
-		console.log(technicianTasks);
 		todoTasks = technicianTasks.filter((task) => task.status === 0);
 		doingTasks = technicianTasks.filter((task) => task.status === 1);
 		doneTasks = technicianTasks.filter((task) => task.status === 2);
@@ -246,7 +245,12 @@
 		</Label>
 		<Label class="space-y-2">
 			<span>Detail</span>
-			<Textarea id="detail" placeholder="Details" bind:value={taskForEditModalHandler.detail} required />
+			<Textarea
+				id="detail"
+				placeholder="Details"
+				bind:value={taskForEditModalHandler.detail}
+				required
+			/>
 		</Label>
 		<Button
 			type="submit"

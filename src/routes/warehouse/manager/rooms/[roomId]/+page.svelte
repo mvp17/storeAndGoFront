@@ -12,44 +12,33 @@
 		TableHead,
 		TableHeadCell,
 		TableBodyRow,
-		TableBodyCell
+		TableBodyCell,
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { http } from '../../../../../stores/http';
 
-	let room = {
-		room_status: 1,
-		pk: 14,
-		name: 'Sala F5',
-		temp: 18,
-		hum: 15,
-		quantity: 10,
-		limit: 20
-	};
 	let open = false;
 	let newTemp = 0;
-	
+	let loading = true;
+
 	export let data;
 	const roomId = data.roomId;
-	
+	let room;
+
 	onMount(async () => {
 		try {
-			console.log(roomId)
 			const res = await $http.get(`/rooms/${roomId}`);
-			console.log(res.data);
-			let room = res.data			
+			room = res.data;
+			loading = false;
 		} catch (err) {
 			console.log(err);
 		}
 	});
 
 	function transfer() {
-		//const res = await instance.get('/transfer-room', {id: roomId});
 	}
 
 	function updateTemp() {
-		console.log(newTemp);
-		//const res = await instance.get('/update-temperature-room', {id: roomId, temperature: newTemp});
 	}
 </script>
 
@@ -57,26 +46,29 @@
 	<title>Warehouse manager rooms detail</title>
 </svelte:head>
 
-<Breadcrumb solid>
-	<BreadcrumbItem href="/warehouse/manager/rooms">Rooms</BreadcrumbItem>
-	<BreadcrumbItem>{room.name}</BreadcrumbItem>
-</Breadcrumb>
+{#if loading}
+	<p>Loading ...</p>
+{:else}
+	<Breadcrumb solid>
+		<BreadcrumbItem href="/warehouse/manager/rooms">Rooms</BreadcrumbItem>
+		<BreadcrumbItem>{room.name}</BreadcrumbItem>
+	</Breadcrumb>
 
-<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Containers</h1>
+	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Containers</h1>
 
-<Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">
-	<TableHead>
-		<TableHeadCell>Name</TableHeadCell>
-		<TableHeadCell>Producer</TableHeadCell>
-		<TableHeadCell>Quantity</TableHeadCell>
-		<TableHeadCell>Min temp</TableHeadCell>
-		<TableHeadCell>Max temp</TableHeadCell>
-		<TableHeadCell>Min hum</TableHeadCell>
-		<TableHeadCell>Max hum</TableHeadCell>
-		<TableHeadCell>Date limit</TableHeadCell>
-	</TableHead>
-	<TableBody>
-		<!-- {#each containers as container}
+	<Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">
+		<TableHead>
+			<TableHeadCell>Name</TableHeadCell>
+			<TableHeadCell>Producer</TableHeadCell>
+			<TableHeadCell>Quantity</TableHeadCell>
+			<TableHeadCell>Min temp</TableHeadCell>
+			<TableHeadCell>Max temp</TableHeadCell>
+			<TableHeadCell>Min hum</TableHeadCell>
+			<TableHeadCell>Max hum</TableHeadCell>
+			<TableHeadCell>Date limit</TableHeadCell>
+		</TableHead>
+		<TableBody>
+			<!-- {#each containers as container}
 			<TableBodyRow>
 				
 				<TableBodyCell>{container.product.productId}</TableBodyCell>
@@ -90,51 +82,53 @@
 				<TableBodyCell>{container.sla.limit}</TableBodyCell>
 			</TableBodyRow>
 		{/each} -->
-	</TableBody>
-</Table>
+		</TableBody>
+	</Table>
 
-<Card style="margin-top:15px;">
-	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-		Information {room.name}
-	</h5>
-	<div class="grid gap-3 md:grid-cols-2">
-		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Status</h5>
-		{#if room.room_status === 0}
-			<h2>Closed</h2>
-		{:else}
-			<h3>Open</h3>
-		{/if}
-	</div>
-	<div class="grid gap-3 md:grid-cols-2">
-		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Temperature</h5>
-		<h5>{room.temp}</h5>
-	</div>
-	<div class="grid gap-3 md:grid-cols-2">
-		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Humidity</h5>
-		<h5>{room.hum}</h5>
-	</div>
-	<div class="grid gap-3 md:grid-cols-2">
-		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Capacity</h5>
-		<h5>{room.quantity} / {room.limit}</h5>
-	</div>
-	{#if room.room_status === 1}
+	<Card style="margin-top:15px;">
+		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+			Information {room.name}
+		</h5>
 		<div class="grid gap-3 md:grid-cols-2">
-			<Button onclick={transfer}>Transfer</Button>
-			<!--Modal or new route with update form?-->
-			<Button
-				onclick={() => {
-					open = true;
-					newTemp = room.temp;
-				}}>Update Temperature</Button
-			>
+			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Status</h5>
+			{#if room.room_status === 0}
+				<h2>Closed</h2>
+			{:else}
+				<h3>Open</h3>
+			{/if}
 		</div>
-	{/if}
-</Card>
+		<div class="grid gap-3 md:grid-cols-2">
+			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+				Temperature
+			</h5>
+			<h5>{room.temp}</h5>
+		</div>
+		<div class="grid gap-3 md:grid-cols-2">
+			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Humidity</h5>
+			<h5>{room.hum}</h5>
+		</div>
+		<div class="grid gap-3 md:grid-cols-2">
+			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Capacity</h5>
+			<h5>{room.quantity} / {room.threshold}</h5>
+		</div>
+		{#if room.room_status === 1}
+			<div class="grid gap-3 md:grid-cols-2">
+				<Button onclick={transfer}>Transfer</Button>
+				<!--Modal or new route with update form?-->
+				<Button
+					onclick={() => {
+						open = true;
+						newTemp = room.temp;
+					}}>Update Temperature</Button
+				>
+			</div>
+		{/if}
+	</Card>
+	<!--
+	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tasks</h1>
 
-<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tasks</h1>
-
-<div class="grid gap-3 md:grid-cols-3">
-	<!-- {#each tasks as task}
+	<div class="grid gap-3 md:grid-cols-3">
+		{#each tasks as task}
 		<Card>
 			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 				{task.description}
@@ -150,8 +144,10 @@
 				DEST: {task.destinationRoom.name}
 			</p>
 		</Card>
-	{/each} -->
-</div>
+	{/each} 
+	</div>
+	-->
+{/if}
 
 <Modal title="Update temperature" bind:open size="xs" autoclose class="w-full">
 	<form class="flex flex-col space-y-6" on:submit|preventDefault={updateTemp}>

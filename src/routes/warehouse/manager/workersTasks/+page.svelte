@@ -12,7 +12,6 @@
 		Input
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { containers } from '../../../../mocks/containers';
 	import { http } from '../../../../stores/http';
 
 	let taskDeletionModalHandler = {
@@ -27,7 +26,7 @@
 	};
 
 	let description = '';
-	let containersForTask = [];
+	let taskContainers = [];
 	let origin_room;
 	let destination_room;
 	let status = '0';
@@ -37,20 +36,32 @@
 	let doneTasks = [];
 
 	let rooms = [];
+	let sla_containers = [];
 
 	onMount(async () => {
 		try {
 			await getWorkerTasks();
 			await getRooms();
+			await getSLAcontainers();
 		} catch (err) {
 			console.log(err);
 		}
 	});
 
+	async function getSLAcontainers() {
+		const res = await $http.get('/sla_containers');
+		sla_containers = res.data;
+		console.log(sla_containers);
+	}
+
+	$: multiSelectItems = sla_containers.map((container) => ({
+		value: container.id,
+		name: `${container.product} (${container.producer})`
+	}));
+
 	async function getWorkerTasks() {
 		const res = await $http.get('/worker_tasks');
 		let workerTasks = res.data;
-		console.log('workerTasks', workerTasks);
 		todoTasks = workerTasks.filter((task) => task.status === 0);
 		doingTasks = workerTasks.filter((task) => task.status === 1);
 		doneTasks = workerTasks.filter((task) => task.status === 2);
@@ -73,13 +84,12 @@
 	async function registerNewWorkerTask() {
 		const reqBody = {
 			description: description,
-			containers: containersForTask,
-			origin_room: origin_room ,
+			containers: taskContainers,
+			origin_room: origin_room,
 			destination_room: destination_room,
 			status: parseInt(status)
 		};
 
-		console.log('reqBody', reqBody);
 		await $http.post('/worker_tasks', reqBody);
 		await getWorkerTasks();
 		resetForm();
@@ -87,7 +97,7 @@
 
 	function resetForm() {
 		description = '';
-		containersForTask = [];
+		taskContainers = [];
 		origin_room = '';
 		destination_room = '';
 		status = '0';
@@ -115,8 +125,9 @@
 					<br />
 					<Label for="containers" class="mb-1">Containers</Label>
 					<MultiSelect
-						items={containers}
-						bind:value={containersForTask}
+						id="containers"
+						items={multiSelectItems}
+						bind:value={taskContainers}
 						placeholder={'Select containers'}
 						required
 					></MultiSelect>

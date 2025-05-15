@@ -97,8 +97,8 @@
 {/if}
 
 <div class="grid gap-3 md:grid-cols-2" style="margin-top:15px">
-	<Button onclick={() => (openEntrance = true)}>New entrance</Button>
-	<Button onclick={() => (openDeparture = true)}>New departure</Button>
+	<Button class="cursor-pointer" onclick={() => (openEntrance = true)}>New entrance</Button>
+	<Button class="cursor-pointer" onclick={() => (openDeparture = true)}>New departure</Button>
 </div>
 
 <Modal title="Entrance manifest" bind:open={openEntrance} size="xs" autoclose class="w-full">
@@ -129,7 +129,7 @@
 				<Input type="text" id="origin" placeholder="Origin" bind:value={origin} required />
 			</div>
 		</div>
-		<Button onclick={() => registerEntranceManifest()}>Submit</Button>
+		<Button class="cursor-pointer" onclick={() => registerEntranceManifest()}>Submit</Button>
 	</form>
 </Modal>
 
@@ -167,7 +167,7 @@
 				/>
 			</div>
 		</div>
-		<Button onclick={() => registerDepartureManifest()}>Submit</Button>
+		<Button class="cursor-pointer" onclick={() => registerDepartureManifest()}>Submit</Button>
 	</form>
 </Modal>
 

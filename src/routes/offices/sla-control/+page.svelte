@@ -8,39 +8,33 @@
 		TableBodyCell,
 		Card
 	} from 'flowbite-svelte';
-	import { expiringSLAContainers } from '../../../mocks/expiringSLAContainers.js';
 	import { onMount } from 'svelte';
 	import { http } from '../../../stores/http';
 
-	let /** @type {
-		{
-			id: string,
-			product: {
-				productId: number,
-				producerId: number
-			},
-			quantity: number,
-			sla: {
-				SLA: string,
-				minTemp: number,
-				maxTemp: number,
-				minHum: number,
-				maxHum: number,
-				date_limit: string
-			},
-			status: number
-		}[]} */ slaContainers = [];
+	let slaContainers = [];
+	let expiringSLAContainers = [];
 
 	onMount(async () => {
 		try {
 			let res = await $http.get('/sla_containers');
 			slaContainers = res.data;
-			//res = await instance.get('/get-expiring-sla-containers');
-			//expiringSLAContainers = res.data.expiringSLAContainers;
+			expiringSLAContainers = slaContainers.filter(container => isToday(container.date_limit));
 		} catch (err) {
 			console.log(err);
 		}
 	});
+
+	function isToday(dateString) {
+		const [day, month, year] = dateString.split('-').map(Number);
+		const containerDate = new Date(year, month - 1, day);
+
+		const today = new Date();
+		return (
+			containerDate.getDate() === today.getDate() &&
+			containerDate.getMonth() === today.getMonth() &&
+			containerDate.getFullYear() === today.getFullYear()
+		);
+	}
 </script>
 
 <svelte:head>
@@ -51,7 +45,7 @@
 
 <Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">
 	<TableHead>
-		<TableHeadCell>SLA</TableHeadCell>
+		<!-- <TableHeadCell>SLA</TableHeadCell> -->
 		<TableHeadCell>Date limit</TableHeadCell>
 		<TableHeadCell>Min temp</TableHeadCell>
 		<TableHeadCell>Max temp</TableHeadCell>
@@ -61,12 +55,12 @@
 	<TableBody>
 		{#each slaContainers as container}
 			<TableBodyRow>
-				<TableBodyCell>{container.sla.SLA}</TableBodyCell>
-				<TableBodyCell>{container.sla.date_limit}</TableBodyCell>
-				<TableBodyCell>{container.sla.minTemp}</TableBodyCell>
-				<TableBodyCell>{container.sla.maxTemp}</TableBodyCell>
-				<TableBodyCell>{container.sla.minHum}</TableBodyCell>
-				<TableBodyCell>{container.sla.maxHum}</TableBodyCell>
+				<!-- <TableBodyCell>{container.sla.SLA}</TableBodyCell> -->
+				<TableBodyCell>{container.date_limit}</TableBodyCell>
+				<TableBodyCell>{container.min_temp}</TableBodyCell>
+				<TableBodyCell>{container.max_temp}</TableBodyCell>
+				<TableBodyCell>{container.min_hum}</TableBodyCell>
+				<TableBodyCell>{container.max_hum}</TableBodyCell>
 			</TableBodyRow>
 		{/each}
 	</TableBody>
@@ -82,7 +76,7 @@
 						Product:
 					</h2>
 					<h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{container.product.productId}
+						{container.product}
 					</h2>
 				</div>
 				<div class="grid gap-3 md:grid-cols-2">
@@ -90,7 +84,7 @@
 						Producer:
 					</h2>
 					<h2 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{container.product.producerId}
+						{container.producer}
 					</h2>
 				</div>
 			</Card>
