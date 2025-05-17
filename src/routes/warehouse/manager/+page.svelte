@@ -7,12 +7,12 @@
 	let /** @type {string} */ entranceRef,
 		/** @type {string} */ entranceDate,
 		/** @type {string} */ origin,
-		/** @type {boolean} */ openEntrance=false;
+		/** @type {boolean} */ openEntrance = false;
 
 	let /** @type {string} */ departureRef,
 		/** @type {string} */ departureDate,
 		/** @type {string} */ destination,
-		/** @type {boolean} */ openDeparture=false;
+		/** @type {boolean} */ openDeparture = false;
 
 	let /** @type {
 		{
@@ -39,9 +39,10 @@
 	});
 
 	async function registerEntranceManifest() {
+		const entrance_date = new Date(entranceDate).toLocaleDateString('en-GB');
 		await $http.post('/entrance_manifests', {
 			reference: entranceRef,
-			entrance_date: entranceDate,
+			entrance_date: entrance_date,
 			origin: origin
 		});
 
@@ -51,9 +52,10 @@
 	}
 
 	async function registerDepartureManifest() {
+		const departure_date = new Date(departureDate).toLocaleDateString('en-GB');
 		await $http.post('/departure_manifests', {
 			reference: departureRef,
-			departure_date: departureDate,
+			departure_date: departure_date,
 			destination: destination
 		});
 

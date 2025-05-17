@@ -51,7 +51,6 @@
 	async function getSLAcontainers() {
 		const res = await $http.get('/sla_containers');
 		sla_containers = res.data;
-		console.log(sla_containers);
 	}
 
 	$: multiSelectItems = sla_containers.map((container) => ({

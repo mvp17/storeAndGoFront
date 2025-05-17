@@ -14,8 +14,11 @@
 					<li aria-current={currentPath === '/offices' ? 'page' : undefined}>
 						<a href="/offices">Home</a>
 					</li>
-					<li aria-current={currentPath === '/offices/manifests' ? 'page' : undefined}>
-						<a href="/offices/manifests">Manifests</a>
+					<li aria-current={currentPath === '/offices/entranceManifests' ? 'page' : undefined}>
+						<a href="/offices/entranceManifests">Entrance manifests</a>
+					</li>
+					<li aria-current={currentPath === '/offices/departureManifests' ? 'page' : undefined}>
+						<a href="/offices/departureManifests">Departure manifests</a>
 					</li>
 					<li aria-current={currentPath === '/offices/sla-control' ? 'page' : undefined}>
 						<a href="/offices/sla-control">SLA Control</a>

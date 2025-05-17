@@ -10,16 +10,17 @@
 		TableBodyCell
 	} from 'flowbite-svelte';
 	import { manifestContainers } from '../../../../mocks/manifestContainers.js';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { http } from '../../../../stores/http.js';
 
-	let manifestId = '';
+	export let data;
+	const manifestId = data.manifestId;
+	let manifest;
+
 	onMount(async () => {
 		try {
-			manifestId = $page.params.manifestId;
-			//const res = await $http.get('/get-manifest-containers', {id: manifestId});
-			//manifestContainers = res.data.manifestContainers;
+			const res = await $http.get(`/departure_manifests/${manifestId}`);
+			manifest = res.data;
 		} catch (err) {
 			console.log(err);
 		}
