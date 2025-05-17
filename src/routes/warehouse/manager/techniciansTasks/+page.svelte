@@ -22,16 +22,23 @@
 	};
 	let taskForEditModalHandler = {
 		open: false,
+		id: '',
+		priority: '0',
 		description: '',
-		roomId: ''
+		roomId: '',
+		detail: '',
+		status: '0',
+		selectedDate: ''
 	};
 
-	let priority = '0';
-	let description = '';
-	let roomId = '';
-	let detail = '';
-	let status = '0';
-	let selectedDate = new Date();
+	let newTechnicianTask = {
+		priority: '0',
+		description: '',
+		roomId: '',
+		detail: '',
+		status: '0',
+		selectedDate: new Date()
+	};
 
 	let todoTasks = [];
 	let doingTasks = [];
@@ -61,42 +68,54 @@
 		doneTasks = technicianTasks.filter((task) => task.status === 2);
 	}
 
-	async function deleteTask(/** @type {string} */ taskId) {
-		await $http.delete(`/technician_tasks/${taskId}`);
+	async function deleteTask() {
+		await $http.delete(`/technician_tasks/${taskDeletionModalHandler.id}`);
 		await getTechnicianTasks();
 	}
 
-	async function editTask(taskForEdit) {
-		console.log(taskForEdit);
-		await $http.patch('/edit-task', { task: taskForEdit });
+	async function editTask() {
+		await $http.patch(`/technician_tasks/${taskForEditModalHandler.id}`, {
+			priority: parseInt(taskForEditModalHandler.priority),
+			description: taskForEditModalHandler.description,
+			room: taskForEditModalHandler.roomId,
+			detail: taskForEditModalHandler.detail,
+			status: parseInt(taskForEditModalHandler.status),
+			date: new Date(taskForEditModalHandler.selectedDate).toLocaleDateString('en-GB')
+		});
+		await getTechnicianTasks();
 	}
 
 	async function registerNewTechnicianTask() {
 		const reqBody = {
-			priority: parseInt(priority),
-			description: description,
-			room: roomId,
-			detail: detail,
-			status: parseInt(status),
-			date: selectedDate.toLocaleDateString('en-GB')
+			priority: parseInt(newTechnicianTask.priority),
+			description: newTechnicianTask.description,
+			room: newTechnicianTask.roomId,
+			detail: newTechnicianTask.detail,
+			status: parseInt(newTechnicianTask.status),
+			date: newTechnicianTask.selectedDate.toLocaleDateString('en-GB')
 		};
 		await $http.post('/technician_tasks', reqBody);
 		await getTechnicianTasks();
 		resetForm();
 	}
 
+	function toISODate(/** @type {string} */ dateStr) {
+		const [day, month, year] = dateStr.split('/');
+		return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+	}
+
 	function resetForm() {
-		priority = '0';
-		description = '';
-		roomId = '';
-		detail = '';
-		status = '0';
-		selectedDate = new Date();
+		newTechnicianTask.priority = '0';
+		newTechnicianTask.description = '';
+		newTechnicianTask.roomId = '';
+		newTechnicianTask.detail = '';
+		newTechnicianTask.status = '0';
+		newTechnicianTask.selectedDate = new Date();
 	}
 </script>
 
 <svelte:head>
-	<title>Warehouse technician tasks</title>
+	<title>Warehouse technicians tasks</title>
 </svelte:head>
 
 <Accordion>
@@ -106,12 +125,12 @@
 			<form on:submit|preventDefault={registerNewTechnicianTask}>
 				<div class="mb-6">
 					<Label for="type" class="mb-1">Priority</Label>
-					<Select id="type" bind:value={priority} required>
+					<Select id="type" bind:value={newTechnicianTask.priority} required>
 						<option value="0">LOWEST</option>
 						<option value="1">LOW</option>
 						<option value="2">MEDIUM</option>
-						<option value="2">HIGH</option>
-						<option value="2">CRITICAL</option>
+						<option value="3">HIGH</option>
+						<option value="4">CRITICAL</option>
 					</Select>
 					<br />
 					<Label for="description" class="mb-1">Description</Label>
@@ -119,31 +138,38 @@
 						type="text"
 						id="description"
 						placeholder="Description"
-						bind:value={description}
+						bind:value={newTechnicianTask.description}
 						required
 					/>
 					<br />
 					<Label for="room" class="mb-1">Room</Label>
-					<Select id="room" bind:value={roomId} required>
+					<Select id="room" bind:value={newTechnicianTask.roomId} required>
 						{#each rooms as room}
 							<option value={room.id}>{room.name}</option>
 						{/each}
 					</Select>
 					<br />
 					<Label for="detail" class="mb-1">Details</Label>
-					<Textarea id="detail" placeholder="Details" bind:value={detail} required />
+					<Textarea
+						id="detail"
+						placeholder="Details"
+						bind:value={newTechnicianTask.detail}
+						required
+					/>
 					<br />
 					<Label for="status" class="mb-1">Status</Label>
-					<Select id="status" bind:value={status} required>
+					<Select id="status" bind:value={newTechnicianTask.status} required>
 						<option value="0">TODO</option>
 						<option value="1">DOING</option>
 						<option value="2">DONE</option>
 					</Select>
 					<br />
 					<div class="mb-64 md:w-1/2">
-						<Datepicker bind:value={selectedDate} color="green" />
+						<Datepicker bind:value={newTechnicianTask.selectedDate} color="green" />
 						<P class="mt-4"
-							>Selected date: {selectedDate ? selectedDate.toLocaleDateString('en-GB') : 'None'}</P
+							>Selected date: {newTechnicianTask.selectedDate
+								? newTechnicianTask.selectedDate.toLocaleDateString('en-GB')
+								: 'None'}</P
 						>
 					</div>
 				</div>
@@ -173,13 +199,27 @@
 					}}>Delete</Button
 				>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					PRIORITY: {task.priority}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
 					ROOM: {task.room.name}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					DATE: {task.date}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					DETAIL: {task.detail}
 				</p>
 				<Button
 					class="cursor-pointer"
 					onclick={() => {
+						taskForEditModalHandler.id = task.id;
 						taskForEditModalHandler.description = task.description;
-						taskForEditModalHandler.room = task.room.name;
+						taskForEditModalHandler.detail = task.detail;
+						taskForEditModalHandler.priority = String(task.priority);
+						taskForEditModalHandler.roomId = task.room.id;
+						taskForEditModalHandler.selectedDate = toISODate(task.date);
+						taskForEditModalHandler.status = String(task.status);
 						taskForEditModalHandler.open = true;
 					}}>Edit</Button
 				>
@@ -195,18 +235,32 @@
 				<Button
 					class="cursor-pointer"
 					onclick={() => {
-						taskDeletionModalHandler.id = task.id.toString();
+						taskDeletionModalHandler.id = task.id;
 						taskDeletionModalHandler.open = true;
 					}}>Delete</Button
 				>
 				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					PRIORITY: {task.priority}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
 					ROOM: {task.room.name}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					DATE: {task.date}
+				</p>
+				<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+					DETAIL: {task.detail}
 				</p>
 				<Button
 					class="cursor-pointer"
 					onclick={() => {
+						taskForEditModalHandler.id = task.id;
 						taskForEditModalHandler.description = task.description;
-						taskForEditModalHandler.room = task.room;
+						taskForEditModalHandler.detail = task.detail;
+						taskForEditModalHandler.priority = String(task.priority);
+						taskForEditModalHandler.roomId = task.room.id;
+						taskForEditModalHandler.selectedDate = toISODate(task.date);
+						taskForEditModalHandler.status = String(task.status);
 						taskForEditModalHandler.open = true;
 					}}>Edit</Button
 				>
@@ -235,28 +289,55 @@
 	class="w-full"
 >
 	<form class="flex flex-col space-y-6" action="#">
-		<Label class="space-y-2">
-			<span>Description</span>
-			<Input type="text" name="description" value={taskForEditModalHandler.description} required />
-		</Label>
-		<Label class="space-y-2">
-			<span>Room</span>
-			<Input type="text" name="room" value={taskForEditModalHandler.room} required />
-		</Label>
-		<Label class="space-y-2">
-			<span>Detail</span>
-			<Textarea
-				id="detail"
-				placeholder="Details"
-				bind:value={taskForEditModalHandler.detail}
+		<Label for="type" class="mb-1">Priority</Label>
+		<Select id="type" bind:value={taskForEditModalHandler.priority} required>
+			<option value="0">LOWEST</option>
+			<option value="1">LOW</option>
+			<option value="2">MEDIUM</option>
+			<option value="3">HIGH</option>
+			<option value="4">CRITICAL</option>
+		</Select>
+		<Label class="space-y-2">Description</Label>
+		<Input
+			type="text"
+			name="description"
+			bind:value={taskForEditModalHandler.description}
+			required
+		/>
+		<Label for="room" class="mb-1">Room</Label>
+		<Select id="room" bind:value={taskForEditModalHandler.roomId} required>
+			{#each rooms as room}
+				<option value={room.id}>{room.name}</option>
+			{/each}
+		</Select>
+		<Label class="space-y-2">Details</Label>
+		<Textarea
+			id="detail"
+			placeholder="Details"
+			bind:value={taskForEditModalHandler.detail}
+			required
+		/>
+		<div>
+			<Label class="mb-2">Date</Label>
+			<Input
+				type="date"
+				id="entranceDate"
+				placeholder="Date"
+				bind:value={taskForEditModalHandler.selectedDate}
 				required
 			/>
-		</Label>
+		</div>
+		<Label for="status" class="mb-1">Status</Label>
+		<Select id="status" bind:value={taskForEditModalHandler.status} required>
+			<option value="0">TODO</option>
+			<option value="1">DOING</option>
+			<option value="2">DONE</option>
+		</Select>
 		<Button
 			type="submit"
 			class="w-full1 cursor-pointer"
 			onclick={() => {
-				editTask(taskForEditModalHandler);
+				editTask();
 			}}>Edit</Button
 		>
 	</form>
@@ -271,7 +352,7 @@
 			color="red"
 			class="me-2 cursor-pointer"
 			onclick={() => {
-				deleteTask(taskDeletionModalHandler.id);
+				deleteTask();
 			}}>Yes, I'm sure</Button
 		>
 		<Button class="cursor-pointer" color="alternative">No, cancel</Button>

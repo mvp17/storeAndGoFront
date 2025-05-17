@@ -1,36 +1,29 @@
 <script>
-	import { Card, Button, Modal, Input, Label } from 'flowbite-svelte';
+	import { Card, Button, Modal, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import WarehouseMap from '../../../components/WarehouseMap.svelte';
 	import { onMount } from 'svelte';
 	import { http } from '../../../stores/http';
 
-	let /** @type {string} */ entranceRef,
-		/** @type {string} */ entranceDate,
-		/** @type {string} */ origin,
-		/** @type {boolean} */ openEntrance = false;
-
-	let /** @type {string} */ departureRef,
-		/** @type {string} */ departureDate,
-		/** @type {string} */ destination,
-		/** @type {boolean} */ openDeparture = false;
-
-	let /** @type {
-		{
-			description: string,
-			containers: {
-				productId: number,
-				quantity: number
-			},
-			origin_room: {
-				name: string
-			},
-			destination_room: {
-				name: string
-			}
-		}[]} */ shipments = [];
+	let shipments = [];
+	let sla_containers = [];
+	let newEntranceManifestModalHandler = {
+		openEntrance: false,
+		reference: '',
+		entrance_date: '',
+		origin: '',
+		containers: []
+	};
+	let newDepartureManifestModalHandler = {
+		openDeparture: false,
+		reference: '',
+		departure_date: '',
+		destination: '',
+		containers: []
+	};
 
 	onMount(async () => {
 		try {
+			await getSLAcontainers();
 			const res = await $http.get('/shipments');
 			shipments = res.data;
 		} catch (err) {
@@ -39,30 +32,48 @@
 	});
 
 	async function registerEntranceManifest() {
-		const entrance_date = new Date(entranceDate).toLocaleDateString('en-GB');
+		const entrance_date = new Date(
+			newEntranceManifestModalHandler.entrance_date
+		).toLocaleDateString('en-GB');
+
 		await $http.post('/entrance_manifests', {
-			reference: entranceRef,
+			reference: newEntranceManifestModalHandler.reference,
 			entrance_date: entrance_date,
-			origin: origin
+			origin: newEntranceManifestModalHandler.origin,
+			containers: newEntranceManifestModalHandler.containers
 		});
 
-		entranceDate = '';
-		entranceRef = '';
-		origin = '';
+		newEntranceManifestModalHandler.entrance_date = '';
+		newEntranceManifestModalHandler.reference = '';
+		newEntranceManifestModalHandler.origin = '';
+	}
+
+	async function getSLAcontainers() {
+		const res = await $http.get('/sla_containers');
+		sla_containers = res.data;
 	}
 
 	async function registerDepartureManifest() {
-		const departure_date = new Date(departureDate).toLocaleDateString('en-GB');
+		const departure_date = new Date(
+			newDepartureManifestModalHandler.departure_date
+		).toLocaleDateString('en-GB');
+
 		await $http.post('/departure_manifests', {
-			reference: departureRef,
+			reference: newDepartureManifestModalHandler.reference,
 			departure_date: departure_date,
-			destination: destination
+			containers: newDepartureManifestModalHandler.containers,
+			destination: newDepartureManifestModalHandler.destination
 		});
 
-		departureDate = '';
-		departureRef = '';
-		destination = '';
+		newDepartureManifestModalHandler.departure_date = '';
+		newDepartureManifestModalHandler.reference = '';
+		newDepartureManifestModalHandler.destination = '';
 	}
+
+	$: multiSelectItems = sla_containers.map((container) => ({
+		value: container.id,
+		name: `${container.product} (${container.producer})`
+	}));
 </script>
 
 <svelte:head>
@@ -99,77 +110,103 @@
 {/if}
 
 <div class="grid gap-3 md:grid-cols-2" style="margin-top:15px">
-	<Button class="cursor-pointer" onclick={() => (openEntrance = true)}>New entrance</Button>
-	<Button class="cursor-pointer" onclick={() => (openDeparture = true)}>New departure</Button>
+	<Button
+		class="cursor-pointer"
+		onclick={() => (newEntranceManifestModalHandler.openEntrance = true)}>New entrance</Button
+	>
+	<Button
+		class="cursor-pointer"
+		onclick={() => (newDepartureManifestModalHandler.openDeparture = true)}>New departure</Button
+	>
 </div>
 
-<Modal title="Entrance manifest" bind:open={openEntrance} size="xs" autoclose class="w-full">
+<Modal
+	title="Entrance manifest"
+	bind:open={newEntranceManifestModalHandler.openEntrance}
+	size="xs"
+	autoclose
+	class="w-full"
+>
 	<form>
 		<div class="mb-6">
-			<div>
-				<Label for="entranceRef" class="mb-2">Reference</Label>
-				<Input
-					type="text"
-					id="entranceRef"
-					placeholder="Reference"
-					bind:value={entranceRef}
-					required
-				/>
-			</div>
-			<div>
-				<Label for="entranceDate" class="mb-2">Date</Label>
-				<Input
-					type="date"
-					id="entranceDate"
-					placeholder="Date"
-					bind:value={entranceDate}
-					required
-				/>
-			</div>
-			<div>
-				<Label for="origin" class="mb-2">Origin</Label>
-				<Input type="text" id="origin" placeholder="Origin" bind:value={origin} required />
-			</div>
+			<Label for="entranceRef" class="mb-2">Reference</Label>
+			<Input
+				type="text"
+				id="entranceRef"
+				placeholder="Reference"
+				bind:value={newEntranceManifestModalHandler.reference}
+				required
+			/>
+			<Label for="entranceDate" class="mb-2">Date</Label>
+			<Input
+				type="date"
+				id="entranceDate"
+				placeholder="Date"
+				bind:value={newEntranceManifestModalHandler.entrance_date}
+				required
+			/>
+			<Label for="origin" class="mb-2">Origin</Label>
+			<Input
+				type="text"
+				id="origin"
+				placeholder="Origin"
+				bind:value={newEntranceManifestModalHandler.origin}
+				required
+			/>
+			<Label for="containers" class="mb-1">Containers</Label>
+			<MultiSelect
+				items={multiSelectItems}
+				bind:value={newEntranceManifestModalHandler.containers}
+				placeholder={'Select containers'}
+				required
+			></MultiSelect>
 		</div>
 		<Button class="cursor-pointer" onclick={() => registerEntranceManifest()}>Submit</Button>
 	</form>
 </Modal>
 
-<Modal title="Departure manifest" bind:open={openDeparture} size="xs" autoclose class="w-full">
+<Modal
+	title="Departure manifest"
+	bind:open={newDepartureManifestModalHandler.openDeparture}
+	size="xs"
+	autoclose
+	class="w-full"
+>
 	<form>
 		<div class="mb-6">
-			<div>
-				<Label for="departureRef" class="mb-2">Reference</Label>
-				<Input
-					type="text"
-					id="departureRef"
-					placeholder="Reference"
-					bind:value={departureRef}
-					required
-				/>
-			</div>
-			<div>
-				<Label for="departureDate" class="mb-2">Date</Label>
-				<Input
-					type="date"
-					id="departureDate"
-					placeholder="Date"
-					bind:value={departureDate}
-					required
-				/>
-			</div>
-			<div>
-				<Label for="destination" class="mb-2">Destination</Label>
-				<Input
-					type="text"
-					id="destination"
-					placeholder="Destination"
-					bind:value={destination}
-					required
-				/>
-			</div>
+			<Label for="departureRef" class="mb-2">Reference</Label>
+			<Input
+				type="text"
+				id="departureRef"
+				placeholder="Reference"
+				bind:value={newDepartureManifestModalHandler.reference}
+				required
+			/>
+			<Label for="departureDate" class="mb-2">Date</Label>
+			<Input
+				type="date"
+				id="departureDate"
+				placeholder="Date"
+				bind:value={newDepartureManifestModalHandler.departure_date}
+				required
+			/>
+			<Label for="destination" class="mb-2">Destination</Label>
+			<Input
+				type="text"
+				id="destination"
+				placeholder="Destination"
+				bind:value={newDepartureManifestModalHandler.destination}
+				required
+			/>
+			<Label for="containers" class="mb-1">Containers</Label>
+			<MultiSelect
+				items={multiSelectItems}
+				bind:value={newDepartureManifestModalHandler.containers}
+				placeholder={'Select containers'}
+				required
+			></MultiSelect>
+			<Button class="cursor-pointer" onclick={() => registerDepartureManifest()}>Submit</Button>
 		</div>
-		<Button class="cursor-pointer" onclick={() => registerDepartureManifest()}>Submit</Button>
 	</form>
 </Modal>
 

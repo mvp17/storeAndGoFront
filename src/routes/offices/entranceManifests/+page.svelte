@@ -69,15 +69,25 @@
 	<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 		{#each entranceManifests as manifest}
 			<Card>
-				<h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-					Reference: {manifest.reference}
-				</h5>
-				<h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-					Origin: {manifest.origin}
-				</h5>
-				<h5 class="mb-4 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-					Date: {manifest.entrance_date}
-				</h5>
+				<div class="space-y-2 text-gray-800 dark:text-gray-100">
+					<div>
+						<span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Reference</span
+						>
+						<span class="text-base font-semibold">{manifest.reference}</span>
+					</div>
+
+					<div>
+						<span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Origin</span>
+						<span class="text-base font-semibold">{manifest.origin}</span>
+					</div>
+
+					<div>
+						<span class="block text-sm font-medium text-gray-500 dark:text-gray-400"
+							>Entrance Date</span
+						>
+						<span class="text-base font-semibold">{manifest.entrance_date}</span>
+					</div>
+				</div>
 				<div class="flex gap-2">
 					<Button class="cursor-pointer" onclick={() => goToManifest(manifest.id)}
 						>📄 More Details</Button

@@ -20,16 +20,21 @@
 	};
 	let taskForEditModalHandler = {
 		open: false,
+		id: '',
+		containers: [],
 		description: '',
 		origin_room: '',
-		destination_room: ''
+		destination_room: '',
+		status: '0'
 	};
 
-	let description = '';
-	let taskContainers = [];
-	let origin_room;
-	let destination_room;
-	let status = '0';
+	let newWorkerTask = {
+		description: '',
+		containers: [],
+		origin_room: '',
+		destination_room: '',
+		status: '0'
+	};
 
 	let todoTasks = [];
 	let doingTasks = [];
@@ -66,13 +71,20 @@
 		doneTasks = workerTasks.filter((task) => task.status === 2);
 	}
 
-	async function deleteTask(/** @type {string} */ taskId) {
-		await $http.delete(`/worker_tasks/${taskId}`);
+	async function deleteTask() {
+		await $http.delete(`/worker_tasks/${taskDeletionModalHandler.id}`);
 		await getWorkerTasks();
 	}
 
-	async function editTask(taskForEdit) {
-		await $http.patch('/edit-task', { task: taskForEdit });
+	async function editTask() {
+		await $http.patch(`/worker_tasks/${taskForEditModalHandler.id}`, {
+			description: taskForEditModalHandler.description,
+			containers: taskForEditModalHandler.containers,
+			origin_room: taskForEditModalHandler.origin_room,
+			destination_room: taskForEditModalHandler.destination_room,
+			status: parseInt(taskForEditModalHandler.status)
+		});
+		await getWorkerTasks();
 	}
 
 	async function getRooms() {
@@ -82,24 +94,23 @@
 
 	async function registerNewWorkerTask() {
 		const reqBody = {
-			description: description,
-			containers: taskContainers,
-			origin_room: origin_room,
-			destination_room: destination_room,
-			status: parseInt(status)
+			description: newWorkerTask.description,
+			containers: newWorkerTask.containers,
+			origin_room: newWorkerTask.origin_room,
+			destination_room: newWorkerTask.destination_room,
+			status: parseInt(newWorkerTask.status)
 		};
-
 		await $http.post('/worker_tasks', reqBody);
 		await getWorkerTasks();
 		resetForm();
 	}
 
 	function resetForm() {
-		description = '';
-		taskContainers = [];
-		origin_room = '';
-		destination_room = '';
-		status = '0';
+		newWorkerTask.description = '';
+		newWorkerTask.containers = [];
+		newWorkerTask.origin_room = '';
+		newWorkerTask.destination_room = '';
+		newWorkerTask.status = '0';
 	}
 </script>
 
@@ -118,7 +129,7 @@
 						type="text"
 						id="description"
 						placeholder="Description"
-						bind:value={description}
+						bind:value={newWorkerTask.description}
 						required
 					/>
 					<br />
@@ -126,33 +137,33 @@
 					<MultiSelect
 						id="containers"
 						items={multiSelectItems}
-						bind:value={taskContainers}
+						bind:value={newWorkerTask.containers}
 						placeholder={'Select containers'}
 						required
 					></MultiSelect>
 					<br />
 					<Label for="origin" class="mb-1">Origin Room</Label>
-					<Select id="origin" bind:value={origin_room} required>
+					<Select id="origin" bind:value={newWorkerTask.origin_room} required>
 						{#each rooms as room}
 							<option value={room.id}>{room.name}</option>
 						{/each}
 					</Select>
 					<br />
 					<Label for="destination" class="mb-1">Destination Room</Label>
-					<Select id="destination" bind:value={destination_room} required>
+					<Select id="destination" bind:value={newWorkerTask.destination_room} required>
 						{#each rooms as room}
 							<option value={room.id}>{room.name}</option>
 						{/each}
 					</Select>
 					<br />
 					<Label for="status" class="mb-1">Status</Label>
-					<Select id="status" bind:value={status} required>
+					<Select id="status" bind:value={newWorkerTask.status} required>
 						<option value="0">TODO</option>
 						<option value="1">DOING</option>
 						<option value="2">DONE</option>
 					</Select>
 				</div>
-				<Button type="submit">Submit</Button>
+				<Button class="cursor-pointer" type="submit">Submit</Button>
 			</form>
 		</Card>
 	</AccordionItem>
@@ -171,6 +182,7 @@
 					{task.description}
 				</h5>
 				<Button
+					class="cursor-pointer"
 					onclick={() => {
 						taskDeletionModalHandler.id = task.id;
 						taskDeletionModalHandler.open = true;
@@ -183,10 +195,14 @@
 					DEST ROOM: {task.destination_room.name}
 				</p>
 				<Button
+					class="cursor-pointer"
 					onclick={() => {
+						taskForEditModalHandler.id = task.id;
 						taskForEditModalHandler.description = task.description;
-						taskForEditModalHandler.origin_room = task.origin_room;
-						taskForEditModalHandler.destination_room = task.destination_room;
+						taskForEditModalHandler.origin_room = task.origin_room.id;
+						taskForEditModalHandler.destination_room = task.destination_room.id;
+						taskForEditModalHandler.containers = task.containers;
+						taskForEditModalHandler.status = String(task.status);
 						taskForEditModalHandler.open = true;
 					}}>Edit</Button
 				>
@@ -200,8 +216,9 @@
 					{task.description}
 				</h5>
 				<Button
+					class="cursor-pointer"
 					onclick={() => {
-						taskDeletionModalHandler.id = task.id.toString();
+						taskDeletionModalHandler.id = task.id;
 						taskDeletionModalHandler.open = true;
 					}}>Delete</Button
 				>
@@ -212,10 +229,14 @@
 					DEST ROOM: {task.destination_room.name}
 				</p>
 				<Button
+					class="cursor-pointer"
 					onclick={() => {
 						taskForEditModalHandler.description = task.description;
-						taskForEditModalHandler.room = task.room;
-						taskForEditModalHandler.detail = task.detail;
+						taskForEditModalHandler.origin_room = task.origin_room.id;
+						taskForEditModalHandler.destination_room = task.destination_room.id;
+						taskForEditModalHandler.containers = task.containers;
+						taskForEditModalHandler.status = String(task.status);
+						taskForEditModalHandler.id = task.id;
 						taskForEditModalHandler.open = true;
 					}}>Edit</Button
 				>
@@ -247,23 +268,41 @@
 	class="w-full"
 >
 	<form class="flex flex-col space-y-6" action="#">
-		<Label class="space-y-2">
-			<span>Description</span>
-			<Input type="text" name="description" value={taskForEditModalHandler.description} required />
-		</Label>
-		<Label class="space-y-2">
-			<span>Room</span>
-			<Input type="text" name="room" value={taskForEditModalHandler.room} required />
-		</Label>
-		<Label class="space-y-2">
-			<span>Detail</span>
-			<Input type="text" name="detail" value={taskForEditModalHandler.detail} required />
-		</Label>
+		<Label class="space-y-2">Description</Label>
+		<Input type="text" name="description" bind:value={taskForEditModalHandler.description} required />
+		<Label class="mb-1">Containers</Label>
+		<MultiSelect
+			items={multiSelectItems}
+			bind:value={taskForEditModalHandler.containers}
+			placeholder={'Select containers'}
+			required
+		></MultiSelect>
+		<Label for="origin" class="mb-1">Origin Room</Label>
+		<Select id="origin" bind:value={taskForEditModalHandler.origin_room} required>
+			{#each rooms as room}
+				<option value={room.id}>{room.name}</option>
+			{/each}
+		</Select>
+		<br />
+		<Label for="destination" class="mb-1">Destination Room</Label>
+		<Select id="destination" bind:value={taskForEditModalHandler.destination_room} required>
+			{#each rooms as room}
+				<option value={room.id}>{room.name}</option>
+			{/each}
+		</Select>
+		<br />
+		<Label for="status" class="mb-1">Status</Label>
+		<Select id="status" bind:value={taskForEditModalHandler.status} required>
+			<option value="0">TODO</option>
+			<option value="1">DOING</option>
+			<option value="2">DONE</option>
+		</Select>
+
 		<Button
 			type="submit"
-			class="w-full1"
+			class="w-full1 cursor-pointer"
 			onclick={() => {
-				editTask(taskForEditModalHandler);
+				editTask();
 			}}>Edit</Button
 		>
 	</form>
@@ -276,11 +315,11 @@
 		</h3>
 		<Button
 			color="red"
-			class="me-2"
+			class="me-2 cursor-pointer"
 			onclick={() => {
-				deleteTask(taskDeletionModalHandler.id);
+				deleteTask();
 			}}>Yes, I'm sure</Button
 		>
-		<Button color="alternative">No, cancel</Button>
+		<Button class="cursor-pointer" color="alternative">No, cancel</Button>
 	</div>
 </Modal>

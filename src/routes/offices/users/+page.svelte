@@ -126,7 +126,7 @@
 						class="cursor-pointer"
 						onclick={() => {
 							deleteUser(user.id);
-						}}>Delete</Button
+						}}>🗑️ Delete</Button
 					></TableBodyCell
 				>
 			</TableBodyRow>
