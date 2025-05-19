@@ -4,7 +4,7 @@
 </script>
 
 <div class="app">
-	<CEOHeader currentPath={data.currentPath}/>
+	<CEOHeader currentPath={data.currentPath} />
 	<main>
 		<slot />
 	</main>

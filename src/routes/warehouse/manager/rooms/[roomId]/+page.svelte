@@ -12,7 +12,7 @@
 		TableHead,
 		TableHeadCell,
 		TableBodyRow,
-		TableBodyCell,
+		TableBodyCell
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { http } from '../../../../../stores/http';
@@ -24,22 +24,32 @@
 	export let data;
 	const roomId = data.roomId;
 	let room;
+	let containers = [];
+	let tasks = [];
 
 	onMount(async () => {
 		try {
-			const res = await $http.get(`/rooms/${roomId}`);
-			room = res.data;
+			await Promise.all([await getRoomById(), await getWorkerTasksForCurrentRoom()]);
 			loading = false;
 		} catch (err) {
 			console.log(err);
 		}
 	});
 
-	function transfer() {
+	async function getWorkerTasksForCurrentRoom() {
+		const res = await $http.get(`/worker_tasks/room/${roomId}`);
+		tasks = res.data;
 	}
 
-	function updateTemp() {
+	async function getRoomById() {
+		const res = await $http.get(`/rooms/${roomId}`);
+		room = res.data;
+		containers = room.containers;
 	}
+
+	function transfer() {}
+
+	function updateTemp() {}
 </script>
 
 <svelte:head>
@@ -58,7 +68,7 @@
 
 	<Table color="green" striped={true} hoverable={true} shadow style="margin-top:10px">
 		<TableHead>
-			<TableHeadCell>Name</TableHeadCell>
+			<TableHeadCell>Product</TableHeadCell>
 			<TableHeadCell>Producer</TableHeadCell>
 			<TableHeadCell>Quantity</TableHeadCell>
 			<TableHeadCell>Min temp</TableHeadCell>
@@ -68,20 +78,19 @@
 			<TableHeadCell>Date limit</TableHeadCell>
 		</TableHead>
 		<TableBody>
-			<!-- {#each containers as container}
-			<TableBodyRow>
-				
-				<TableBodyCell>{container.product.productId}</TableBodyCell>
-				<TableBodyCell>{container.product.producerId}</TableBodyCell>
-				<TableBodyCell>{container.quantity}</TableBodyCell>
-				
-				<TableBodyCell>{container.sla.minTemp}</TableBodyCell>
-				<TableBodyCell>{container.sla.maxTemp}</TableBodyCell>
-				<TableBodyCell>{container.sla.minHum}</TableBodyCell>
-				<TableBodyCell>{container.sla.maxHum}</TableBodyCell>
-				<TableBodyCell>{container.sla.limit}</TableBodyCell>
-			</TableBodyRow>
-		{/each} -->
+			{#each containers as container}
+				<TableBodyRow>
+					<TableBodyCell>{container.product}</TableBodyCell>
+					<TableBodyCell>{container.producer}</TableBodyCell>
+					<TableBodyCell>{container.quantity}</TableBodyCell>
+
+					<TableBodyCell>{container.min_temp}</TableBodyCell>
+					<TableBodyCell>{container.max_temp}</TableBodyCell>
+					<TableBodyCell>{container.min_hum}</TableBodyCell>
+					<TableBodyCell>{container.max_hum}</TableBodyCell>
+					<TableBodyCell>{container.date_limit}</TableBodyCell>
+				</TableBodyRow>
+			{/each}
 		</TableBody>
 	</Table>
 
@@ -101,11 +110,11 @@
 			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
 				Temperature
 			</h5>
-			<h5>{room.temp}</h5>
+			<h5>{room.temp} ºC</h5>
 		</div>
 		<div class="grid gap-3 md:grid-cols-2">
 			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Humidity</h5>
-			<h5>{room.hum}</h5>
+			<h5>{room.hum} %</h5>
 		</div>
 		<div class="grid gap-3 md:grid-cols-2">
 			<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Capacity</h5>
@@ -113,9 +122,10 @@
 		</div>
 		{#if room.room_status === 1}
 			<div class="grid gap-3 md:grid-cols-2">
-				<Button onclick={transfer}>Transfer</Button>
+				<Button class="cursor-pointer" onclick={transfer}>Transfer</Button>
 				<!--Modal or new route with update form?-->
 				<Button
+					class="cursor-pointer"
 					onclick={() => {
 						open = true;
 						newTemp = room.temp;
@@ -124,29 +134,36 @@
 			</div>
 		{/if}
 	</Card>
-	<!--
+
 	<h1 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tasks</h1>
 
 	<div class="grid gap-3 md:grid-cols-3">
 		{#each tasks as task}
-		<Card>
-			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-				{task.description}
-			</h5>
-			<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-				PRODUCT: {task.containers.product.productId}
-			</p>
-			<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-				QUANTITY: {task.containers.quantity}
-			</p>
-			<p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
-				ORGN: {task.originRoom.name}
-				DEST: {task.destinationRoom.name}
-			</p>
-		</Card>
-	{/each} 
+			<Card class="mb-6">
+				<h2 class="mb-2 text-xl font-bold">Task: {task.description}</h2>
+
+				<div class="mb-2 text-sm text-gray-600">
+					<!-- <p><strong>Status:</strong> {task.status}</p> -->
+					<p><strong>Origin Room:</strong> {task.origin_room?.name}</p>
+					<p><strong>Destination Room:</strong> {task.destination_room?.name}</p>
+				</div>
+
+				<div class="mt-4">
+					<h3 class="mb-2 text-lg font-semibold">Containers:</h3>
+					{#each task.containers as container}
+						<Card class="mb-4 border border-gray-200">
+							<p><strong>Product:</strong> {container.product}</p>
+							<p><strong>Producer:</strong> {container.producer}</p>
+							<p><strong>Quantity:</strong> {container.quantity}</p>
+							<p><strong>Temp Range:</strong> {container.min_temp}°C - {container.max_temp}°C</p>
+							<p><strong>Humidity Range:</strong> {container.min_hum}% - {container.max_hum}%</p>
+							<p><strong>Date Limit:</strong> {container.date_limit}</p>
+						</Card>
+					{/each}
+				</div>
+			</Card>
+		{/each}
 	</div>
-	-->
 {/if}
 
 <Modal title="Update temperature" bind:open size="xs" autoclose class="w-full">

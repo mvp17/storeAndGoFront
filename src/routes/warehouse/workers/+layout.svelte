@@ -4,7 +4,7 @@
 </script>
 
 <div class="app">
-	<WorkersHeader currentPath={data.currentPath}/>
+	<WorkersHeader currentPath={data.currentPath} />
 	<main>
 		<slot />
 	</main>

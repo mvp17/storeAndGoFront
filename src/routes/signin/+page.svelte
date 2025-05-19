@@ -33,8 +33,8 @@
 	<title>Sign In</title>
 </svelte:head>
 
-<Card class="max-w-sm mx-auto p-6 bg-white shadow-lg rounded-lg">
-	<h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
+<Card class="mx-auto max-w-sm rounded-lg bg-white p-6 shadow-lg">
+	<h2 class="mb-6 text-center text-2xl font-bold">Sign In</h2>
 	<form on:submit|preventDefault={signIn} class="space-y-6">
 		<div>
 			<Label for="username" class="mb-1">Username</Label>
@@ -43,7 +43,7 @@
 				id="username"
 				placeholder="jr17"
 				bind:value={username}
-				class="w-full p-2 border rounded"
+				class="w-full rounded border p-2"
 				required
 			/>
 		</div>
@@ -54,13 +54,13 @@
 				id="password"
 				placeholder="•••••••••"
 				bind:value={password}
-				class="w-full p-2 border rounded"
+				class="w-full rounded border p-2"
 				required
 			/>
 		</div>
-		<div class="flex justify-between mt-6">
-			<Button type="submit" class="w-full mr-2 cursor-pointer">Sign In</Button>
-			<Button color="blue" onclick={goBack} class="w-full ml-2 cursor-pointer">Back</Button>
+		<div class="mt-6 flex justify-between">
+			<Button type="submit" class="mr-2 w-full cursor-pointer">Sign In</Button>
+			<Button color="blue" onclick={goBack} class="ml-2 w-full cursor-pointer">Back</Button>
 		</div>
 	</form>
 </Card>

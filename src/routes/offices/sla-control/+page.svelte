@@ -18,7 +18,7 @@
 		try {
 			let res = await $http.get('/sla_containers');
 			slaContainers = res.data;
-			expiringSLAContainers = slaContainers.filter(container => isToday(container.date_limit));
+			expiringSLAContainers = slaContainers.filter((container) => isToday(container.date_limit));
 		} catch (err) {
 			console.log(err);
 		}

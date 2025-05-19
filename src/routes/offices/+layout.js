@@ -6,7 +6,7 @@ export const csr = dev;
 
 // @ts-ignore
 export function load({ url }) {
-  return {
-    currentPath: url.pathname
-  };
+	return {
+		currentPath: url.pathname
+	};
 }

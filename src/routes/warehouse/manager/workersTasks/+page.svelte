@@ -269,7 +269,12 @@
 >
 	<form class="flex flex-col space-y-6" action="#">
 		<Label class="space-y-2">Description</Label>
-		<Input type="text" name="description" bind:value={taskForEditModalHandler.description} required />
+		<Input
+			type="text"
+			name="description"
+			bind:value={taskForEditModalHandler.description}
+			required
+		/>
 		<Label class="mb-1">Containers</Label>
 		<MultiSelect
 			items={multiSelectItems}
